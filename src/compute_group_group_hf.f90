@@ -134,7 +134,7 @@ contains
                 cycle
             end if
             !
-            r8 = fij(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq)
+            r8 = fij(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rabssq)
             cforce_Iam(:,li,ilist) = cforce_Iam(:,li,ilist) + r8*r(:)
             cforce_Iam(:,lj,ilist) = cforce_Iam(:,lj,ilist) - r8*r(:)
             typeflag = 0
@@ -144,17 +144,14 @@ contains
             mpi_sum, master, mpi_comm_world, ierr)
         !
     contains
-        function fij(eps,sig,rcsq,rabssq)
+        function fij(eps,sig,rabssq)
             implicit none
-            double precision eps,sig,rcsq
+            double precision eps,sig
             double precision fij
-            double precision sigsq, rabssq, sbr6, sbrc6, dlja3
+            double precision sigsq, rabssq, sbr6, dlja3
             sigsq = sig*sig
             sbr6 = (sigsq/rabssq)**3d0
-            sbrc6 = (sigsq/rcsq)**3d0
-            dlja3 = (2d0*sbrc6-1d0)*sbrc6*rabssq/rcsq
-            !dljb = (-7.0d0*sbrc6 + 4.0d0)*sbrc6
-            fij = 24d0*eps*((2d0*sbr6-1d0)*sbr6 - dlja3)/rabssq
+            fij = 24d0*eps*(2d0*sbr6-1d0)*sbr6/rabssq
             return
         end function fij
     end subroutine calc_force_pair

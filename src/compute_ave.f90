@@ -42,6 +42,7 @@ contains
         ndata_now = 0
         do i=1,navefcnow
             ndata_now = ndata_now + nfcdata(fcnumi(avefc(iave0fc(nlist+1)+i)))
+            write(*,*) nfcdata(fcnumi(avefc(iave0fc(nlist+1)+i))), fcnumi(avefc(iave0fc(nlist+1)+i)), avefc(iave0fc(nlist+1)+i)
         end do
         ndata = [ndata, ndata_now]
         if(nlist==0) i0avedata = [0]
