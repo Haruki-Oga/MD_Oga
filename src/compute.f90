@@ -9,7 +9,9 @@ contains
         use compute_chunk_1d_mod, only : init_compute_chunk_1d
         use compute_compv_mod, only : init_compute_compv
         use compute_group_group_mod, only : init_compute_group_group
+        use compute_group_group_q_mod, only : init_compute_group_group_q
         use compute_group_group_hf_mod, only : init_compute_group_group_hf
+        use compute_group_group_q_hf_mod, only : init_compute_group_group_q_hf
         use compute_correlate_mod, only : init_compute_correlate
         use compute_ave_mod, only : init_compute_ave
         implicit none
@@ -36,7 +38,8 @@ contains
                 if(comchar=="compute_compv") call init_compute_compv
             end if
             if(comchar=="compute_group_group") call init_compute_group_group
-            if(comchar=="compute_group_group_hf") call init_compute_group_group_hf
+            if(comchar=="compute_group_group_q") call init_compute_group_group_q
+            if(comchar=="compute_group_group_q_hf") call init_compute_group_group_q_hf
             !
             if(comchar=="compute_correlate") call init_compute_correlate
             if(Iam==master)then
@@ -69,7 +72,9 @@ contains
         use compute_chunk_1d_mod, only : compute_chunk_1d
         use compute_compv_mod, only : compute_compv
         use compute_group_group_mod, only : compute_group_group
+        use compute_group_group_q_mod, only : compute_group_group_q
         use compute_group_group_hf_mod, only : compute_group_group_hf
+        use compute_group_group_q_hf_mod, only : compute_group_group_q_hf
         use compute_correlate_mod, only : compute_correlate
         use compute_ave_mod, only : compute_ave
         implicit none
@@ -81,7 +86,9 @@ contains
         end if
         !
         call compute_group_group
+        call compute_group_group_q
         call compute_group_group_hf
+        call compute_group_group_q_hf
         !
         call compute_correlate
         if(Iam==master)then
