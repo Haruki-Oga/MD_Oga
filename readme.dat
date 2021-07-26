@@ -1,0 +1,95 @@
+
+=== comand ===
+mpiexec -n ${COR} MD.out ${infile}
+
+
+=== infile ===
+./init/init.dat  # initical condition (atom pos, vel,  etc, lannms data file format)
+./init/last.dat  # initical condition
+./result/data/  # output directory (terminal, density)
+0.2332373E-02  # dt
+6000  # the number of total simuation repetition                                        
+200  # the number of repetition output                               
+# atype, atype, eps, sig, cutoff  # LJ parameter
+1 1 1.0 1.0 3.5   # LJ potential parameter
+1 2 3.0953E-01 1.014706E+00 3.5
+1 3 3.0953E-01 1.014706E+00 3.5
+fix
+  # fixname fcnum
+  #     atype dir etc
+    fix_freeze 1
+        6 111
+compute
+  # computename fcnum
+  #     atype nevery etc
+    compute_temp 100
+        1 20
+output
+  # output_file_name
+  # nevery number_of_fcnum_for_output
+  # fcnum1, fcnum2, 
+    ./result/data/langevinene.dat
+    600000 2
+    3 4
+
+
+=== fix command ===
+--- fix_freeze ---
+    freeze atom motion: dp = 0.0, v = 0.0
+example
+    fix_freeze 1
+        1 111
+description
+    fix_freeze ${fcnum} 
+        ${atom_type} ${xyz(on:1 off:0)}
+flags
+    if( pflag or vflag or fflag ) error
+    pflag, vflag --> true
+
+--- fix_langevin ---
+    langevin thermostat: f = f -gamma*v +rand
+example
+    fix_langevin 1
+        1 111 8.269E-01 2.8347E-02
+description
+    fix_langevin ${fcnum} 
+        ${atom_type} ${xyz(on:1 off:0)} ${temperature} ${gamma}
+flags
+    if( pflag or vflag or fflag ) error
+    fflag --> true
+  
+  fix_langevin 3   # langevin thermostat (atype, direction(xyz), temperature, gamma)
+   4 011 8.269E-01 2.8347E-02
+  fix_langevin  4
+   5 011 8.269E-01 2.8347E-02
+  #fix_addforce  6  # add force to atom (atype, direction(xyz), fx, fy, fz)
+  # 7 001 0.0 0.0 10.0
+  #fix_addforce  5
+  # 6 001 0.0 0.0 10.0
+  fix_move_linear 6  # set atom velocity (atype, direction(xyz), vx, vy, vz)
+   6 111 0.1 0.0 0.0
+  fix_move_linear 7
+   7 111 -0.1 0.0 0.0
+  #fix_rigid 8  # set atoms as group ( atype, direction(xyz))
+  # 6 011
+compute
+  compute_temp 100
+   1 20
+  compute_temp 101
+   2 20
+  compute_temp 102
+   3 20
+  compute_temp 103
+   4 20
+  compute_temp 104
+   5 20
+  compute_temp 105
+   6 20
+  compute_temp 106
+   7 20
+output
+  ./result/data/outputtest.dat
+   40 100
+  ./result/data/outputtest2.dat
+   80 101
+  

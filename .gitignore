@@ -1,0 +1,5 @@
+result/
+init/
+gnuplot/*.eps
+calc.dat
+log.dat
