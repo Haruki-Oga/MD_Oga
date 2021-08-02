@@ -1,6 +1,6 @@
 ! compute temperature
 module compute_ave_mod
-    integer myfc
+    integer,allocatable :: myfc(:)
     integer :: nlist = 0
     integer,allocatable :: ndata(:), i0avedata(:)
     character(128),allocatable :: avefile(:)
@@ -53,7 +53,7 @@ contains
         nlist = nlist + 1
         ! --- return ---
         fcnum = [fcnum, ifc]
-        myfc = nfc
+        myfc = [myfc, nfc]
         nfcdata = [nfcdata, ndata_now]
         ! --- calc fcnumi ---
         if(size(fcnumi) < ifc)then
@@ -73,7 +73,6 @@ contains
         use fix_compute_mod
         implicit none
         integer j,i,imol,i0,n,k,l
-        double precision random, work_now(1:nlist)
         !
         if( nlist == 0 ) return
         ! --- calculate average ---
@@ -85,7 +84,7 @@ contains
                 n = nfcdata(j)
                 avedata(k+1:k+n) = avedata(k+1:k+n) + fcdata(i0+1:i0+n)
                 ! --- return ---
-                fcdata(i0fcdata(myfc)+1:i0fcdata(myfc)+n) = avedata(k+1:k+n)
+                fcdata(i0fcdata(myfc(i))+k+1:i0fcdata(myfc(i))+k+n) = avedata(k+1:k+n)
                 !
                 k = k + n
             end do

@@ -9,7 +9,7 @@ SRCS = subroutine_function.f90 MD_mod.f90 fix_compute_mod.f90\
 	  fix.f90\
 	  compute_temp.f90 compute_chunk_1d.f90 compute_compv.f90\
 	  compute_group_group.f90 compute_group_group_q.f90 compute_group_group_hf.f90 compute_group_group_q_hf.f90\
-	  compute_correlate.f90 compute_ave.f90\
+	  compute_sum.f90 compute_correlate.f90 compute_ave.f90\
 	  compute.f90\
 	  output.f90\
 	  MD.f90
