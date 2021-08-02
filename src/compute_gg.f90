@@ -1,5 +1,5 @@
 ! compute temperature
-module compute_group_group_q_mod
+module compute_gg_mod
     integer,allocatable :: myfc(:)
     integer,parameter :: ndata = 4
     integer :: nlist = 0
@@ -8,7 +8,7 @@ module compute_group_group_q_mod
     double precision,allocatable :: cforce(:,:), cforce_Iam(:,:), cforce_pair(:,:), cforce_bonds(:,:)
     !
 contains
-    subroutine init_compute_group_group_q
+    subroutine init_compute_gg
         use update_mod
         use commn
         use file_mod
@@ -49,11 +49,11 @@ contains
             fcnumi(ifc) = nfc
         end if
         ! ===
-    end subroutine init_compute_group_group_q
+    end subroutine init_compute_gg
     !
     !
     ! --- compute temperature ---
-    subroutine compute_group_group_q
+    subroutine compute_gg
         use update_mod
         use commn
         use constant_mod
@@ -75,7 +75,7 @@ contains
                 fcdata(i0fcdata(myfc(i))+1:i0fcdata(myfc(i))+ndata) = cforce(1:4,i)
             end do
         end if
-    end subroutine compute_group_group_q
+    end subroutine compute_gg
 
     subroutine calc_force
         use commn
@@ -124,7 +124,7 @@ contains
                 cycle
             end if
             !
-            r8 = fij(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq)
+            r8 = fij(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rabssq)
             cforce_Iam(1:3,ilist) = cforce_Iam(1:3,ilist) + typeflag*r8*r(:)
             typeflag = 0
         end do
@@ -133,19 +133,15 @@ contains
             mpi_sum, master, mpi_comm_world, ierr)
         !
     contains
-        function fij(eps,sig,rcsq,rabssq)
+        function fij(eps,sig,rabssq)
             implicit none
-            double precision eps,sig,rcsq
+            double precision eps,sig
             double precision fij
-            double precision sigsq, rabssq, sbr6, sbrc6, dlja3
+            double precision sigsq, rabssq, sbr6
             sigsq = sig*sig
             sbr6 = (sigsq/rabssq)**3d0
-            sbrc6 = (sigsq/rcsq)**3d0
-            dlja3 = (2d0*sbrc6-1d0)*sbrc6*rabssq/rcsq
-            !dljb = (-7.0d0*sbrc6 + 4.0d0)*sbrc6
-            fij = 24d0*eps*((2d0*sbr6-1d0)*sbr6 - dlja3)/rabssq
-            cforce_Iam(4,ilist) = cforce_Iam(4,ilist) + 4d0*eps*( (sbr6-1d0)*sbr6 &
-                + dlja3*3d0 + (-7d0*sbrc6+4d0)*sbrc6 )
+            fij = 24d0*eps*(2d0*sbr6-1d0)*sbr6/rabssq
+            cforce_Iam(4,ilist) = cforce_Iam(4,ilist) + 4d0*eps*(sbr6-1d0)*sbr6
             return
         end function fij
     end subroutine calc_force_pair
@@ -189,5 +185,5 @@ contains
         !
     end subroutine calc_force_bonds
 
-end module compute_group_group_q_mod
+end module compute_gg_mod
 

@@ -1,5 +1,5 @@
 ! compute temperature
-module compute_group_group_hf_mod
+module compute_gg_hf_mod
     integer,allocatable :: myfc(:)
     integer,parameter :: ndata = 1
     integer :: nlist = 0
@@ -9,7 +9,7 @@ module compute_group_group_hf_mod
     double precision,allocatable :: hf(:)
     !
 contains
-    subroutine init_compute_group_group_hf
+    subroutine init_compute_gg_hf
         use update_mod
         use commn
         use file_mod
@@ -49,11 +49,11 @@ contains
             fcnumi(ifc) = nfc
         end if
         ! ===
-    end subroutine init_compute_group_group_hf
+    end subroutine init_compute_gg_hf
     !
     !
     ! --- compute temperature ---
-    subroutine compute_group_group_hf
+    subroutine compute_gg_hf
         use update_mod
         use commn
         use constant_mod
@@ -85,7 +85,7 @@ contains
                 fcdata(i0fcdata(myfc(i))+1) = hf(i)
             end do
         end if
-    end subroutine compute_group_group_hf
+    end subroutine compute_gg_hf
 
     subroutine calc_force
         use commn
@@ -195,5 +195,5 @@ contains
         !
     end subroutine calc_force_bonds
 
-end module compute_group_group_hf_mod
+end module compute_gg_hf_mod
 

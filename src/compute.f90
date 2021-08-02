@@ -8,10 +8,10 @@ contains
         use compute_temp_mod, only : init_compute_temp
         use compute_chunk_1d_mod, only : init_compute_chunk_1d
         use compute_compv_mod, only : init_compute_compv
-        use compute_group_group_mod, only : init_compute_group_group
-        use compute_group_group_q_mod, only : init_compute_group_group_q
-        use compute_group_group_hf_mod, only : init_compute_group_group_hf
-        use compute_group_group_q_hf_mod, only : init_compute_group_group_q_hf
+        use compute_gg_mod, only : init_compute_gg
+        use compute_ggq_mod, only : init_compute_ggq
+        use compute_gg_hf_mod, only : init_compute_gg_hf
+        use compute_ggq_hf_mod, only : init_compute_ggq_hf
         use compute_sum_mod, only : init_compute_sum
         use compute_correlate_mod, only : init_compute_correlate
         use compute_ave_mod, only : init_compute_ave
@@ -38,10 +38,10 @@ contains
                 if(comchar=="compute_chunk_1d") call init_compute_chunk_1d
                 if(comchar=="compute_compv") call init_compute_compv
             end if
-            if(comchar=="compute_group_group") call init_compute_group_group
-            if(comchar=="compute_group_group_q") call init_compute_group_group_q
-            if(comchar=="compute_group_group_hf") call init_compute_group_group_hf
-            if(comchar=="compute_group_group_q_hf") call init_compute_group_group_q_hf
+            if(comchar=="compute_gg") call init_compute_gg
+            if(comchar=="compute_ggq") call init_compute_ggq
+            if(comchar=="compute_gg_hf") call init_compute_gg_hf
+            if(comchar=="compute_ggq_hf") call init_compute_ggq_hf
             !
             if(Iam==master)then
                 if(comchar=="compute_sum") call init_compute_sum
@@ -76,10 +76,10 @@ contains
         use compute_temp_mod, only : compute_temp
         use compute_chunk_1d_mod, only : compute_chunk_1d
         use compute_compv_mod, only : compute_compv
-        use compute_group_group_mod, only : compute_group_group
-        use compute_group_group_q_mod, only : compute_group_group_q
-        use compute_group_group_hf_mod, only : compute_group_group_hf
-        use compute_group_group_q_hf_mod, only : compute_group_group_q_hf
+        use compute_gg_mod, only : compute_gg
+        use compute_ggq_mod, only : compute_ggq
+        use compute_gg_hf_mod, only : compute_gg_hf
+        use compute_ggq_hf_mod, only : compute_ggq_hf
         use compute_sum_mod, only : compute_sum
         use compute_correlate_mod, only : compute_correlate
         use compute_ave_mod, only : compute_ave
@@ -91,10 +91,10 @@ contains
             call compute_compv
         end if
         !
-        call compute_group_group
-        call compute_group_group_q
-        call compute_group_group_hf
-        call compute_group_group_q_hf
+        call compute_gg
+        call compute_ggq
+        call compute_gg_hf
+        call compute_ggq_hf
         !
         if(Iam==master)then
             call compute_sum
@@ -104,5 +104,4 @@ contains
             call compute_ave
         end if
     end subroutine compute
-
 end module compute_mod
