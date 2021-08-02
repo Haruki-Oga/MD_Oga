@@ -12,6 +12,7 @@ contains
         use compute_group_group_q_mod, only : init_compute_group_group_q
         use compute_group_group_hf_mod, only : init_compute_group_group_hf
         use compute_group_group_q_hf_mod, only : init_compute_group_group_q_hf
+        use compute_sum_mod, only : init_compute_sum
         use compute_correlate_mod, only : init_compute_correlate
         use compute_ave_mod, only : init_compute_ave
         implicit none
@@ -42,6 +43,9 @@ contains
             if(comchar=="compute_group_group_hf") call init_compute_group_group_hf
             if(comchar=="compute_group_group_q_hf") call init_compute_group_group_q_hf
             !
+            if(Iam==master)then
+                if(comchar=="compute_sum") call init_compute_sum
+            end if
             if(comchar=="compute_correlate") call init_compute_correlate
             if(Iam==master)then
                 if(comchar=="compute_ave") call init_compute_ave
@@ -76,6 +80,7 @@ contains
         use compute_group_group_q_mod, only : compute_group_group_q
         use compute_group_group_hf_mod, only : compute_group_group_hf
         use compute_group_group_q_hf_mod, only : compute_group_group_q_hf
+        use compute_sum_mod, only : compute_sum
         use compute_correlate_mod, only : compute_correlate
         use compute_ave_mod, only : compute_ave
         implicit none
@@ -91,6 +96,9 @@ contains
         call compute_group_group_hf
         call compute_group_group_q_hf
         !
+        if(Iam==master)then
+            call compute_sum
+        end if
         call compute_correlate
         if(Iam==master)then
             call compute_ave

@@ -1,11 +1,10 @@
 ! compute temperature
 module compute_sum_mod
-    integer myfc
+    integer,allocatable :: myfc(:)
     integer :: nlist = 0
-    integer,allocatable :: ndata(:), i0avedata(:)
-    character(128),allocatable :: avefile(:)
-    integer,allocatable :: avefc(:), navefc(:), iave0fc(:)
-    double precision,allocatable :: avedata(:)
+    integer,allocatable :: ndata(:), i0sumdata(:)
+    integer,allocatable :: sumfc(:), nsumfc(:), isum0fc(:)
+    double precision,allocatable :: sumdata(:)
     !
 contains
     subroutine init_compute_sum
@@ -15,40 +14,44 @@ contains
         use constant_mod
         use fix_compute_mod
         implicit none
-        integer i, ios, iatype, navefcnow, ndata_now
+        integer i, ios, iatype, nsumfcnow, ndata_now
         double precision,allocatable :: a(:)
         character(64) form1
         character(128) char1
         !
         nfc = nfc + 1
         ! === read conf file ===
-        read(ifilecalc,*) navefcnow
-        navefc = [navefc, navefcnow]
-        if(nlist==0) iave0fc = [0]
-        iave0fc = [iave0fc, iave0fc(nlist+1)+navefcnow]
-        do i=1,navefcnow
-            avefc = [avefc, -1]
+        read(ifilecalc,*) nsumfcnow
+        nsumfc = [nsumfc, nsumfcnow]
+        if(nlist==0) isum0fc = [0]
+        isum0fc = [isum0fc, isum0fc(nlist+1)+nsumfcnow]
+        do i=1,nsumfcnow
+            sumfc = [sumfc, -1]
         end do
-        read(ifilecalc,*) (avefc(iave0fc(nlist+1)+i),i=1,navefcnow)
-        write(form1,'(I0)') navefcnow
+        read(ifilecalc,*) (sumfc(isum0fc(nlist+1)+i),i=1,nsumfcnow)
+        write(form1,'(I0)') nsumfcnow
         form1 = "(A,I,A,"//trim(form1)//"I)"
-        write(*,form1) __FILE__, navefcnow, trim(avefile(nlist+1)), (avefc(iave0fc(nlist+1)+i),i=1,navefcnow)
+        write(*,form1) __FILE__, nsumfcnow, (sumfc(isum0fc(nlist+1)+i),i=1,nsumfcnow)
         !
         ndata_now = 0
-        do i=1,navefcnow
-            ndata_now = ndata_now + nfcdata(fcnumi(avefc(iave0fc(nlist+1)+i)))
-            write(*,*) nfcdata(fcnumi(avefc(iave0fc(nlist+1)+i))), fcnumi(avefc(iave0fc(nlist+1)+i)), avefc(iave0fc(nlist+1)+i)
+        do i=1,nsumfcnow
+            if(i==1)then
+                ndata_now = nfcdata(fcnumi(sumfc(isum0fc(nlist+1)+i)))
+                cycle
+            end if
+            if(ndata_now /= nfcdata(fcnumi(sumfc(isum0fc(nlist+1)+i)))) call error_msg("ndata_now mismatch @"//__FILE__)
+            write(*,*) nfcdata(fcnumi(sumfc(isum0fc(nlist+1)+i))), fcnumi(sumfc(isum0fc(nlist+1)+i)), sumfc(isum0fc(nlist+1)+i)
         end do
         ndata = [ndata, ndata_now]
-        if(nlist==0) i0avedata = [0]
-        i0avedata = [i0avedata, i0avedata(nlist+1)+ndata_now]
+        if(nlist==0) i0sumdata = [0]
+        i0sumdata = [i0sumdata, i0sumdata(nlist+1)+ndata_now]
         do i=1,ndata_now
-            avedata = [avedata, 0d0]
+            sumdata = [sumdata, 0d0]
         end do
         nlist = nlist + 1
         ! --- return ---
         fcnum = [fcnum, ifc]
-        myfc = nfc
+        myfc = [myfc, nfc]
         nfcdata = [nfcdata, ndata_now]
         ! --- calc fcnumi ---
         if(size(fcnumi) < ifc)then
@@ -61,48 +64,30 @@ contains
     end subroutine init_compute_sum
     !
     !
-    ! --- compute average ---
+    ! --- compute sum ---
     subroutine compute_sum
         use commn
         use constant_mod
         use fix_compute_mod
         implicit none
         integer j,i,imol,i0,n,k,l
-        double precision random, work_now(1:nlist)
         !
         if( nlist == 0 ) return
-        ! --- calculate average ---
+        ! --- calculate sum ---
         k = 0
+        sumdata(:) = 0d0
         do i=1,nlist
-            do l=1,navefc(i)
-                j = fcnumi(avefc(iave0fc(i)+l))
+            n = ndata(i)
+            do l=1,nsumfc(i)
+                j = fcnumi(sumfc(isum0fc(i)+l))
                 i0 = i0fcdata(j)
-                n = nfcdata(j)
-                avedata(k+1:k+n) = avedata(k+1:k+n) + fcdata(i0+1:i0+n)
-                ! --- return ---
-                fcdata(i0fcdata(myfc)+1:i0fcdata(myfc)+n) = avedata(k+1:k+n)
-                !
-                k = k + n
+                sumdata(k+1:k+n) = sumdata(k+1:k+n) + fcdata(i0+1:i0+n)
             end do
+            ! --- return ---
+            fcdata(i0fcdata(myfc(i))+1:i0fcdata(myfc(i))+n) = sumdata(k+1:k+n)
+            !
+            k = k + n
         end do
-        ! --- output ---
-        if(irep==nrep)then
-            k = 0
-            do i=1,nlist
-                open(10,file=avefile(i))
-                do l=1,navefc(i)
-                    n = nfcdata(fcnumi(avefc(iave0fc(i)+l)))
-                    write(10,'(3I10)',advance="no") avefc(iave0fc(i)+l), n, fcnumi(avefc(iave0fc(i)+l))
-                    do j=1,n
-                        write(10,'(E15.5e3)',advance="no") avedata(k+j)/nrep
-                    end do
-                    write(10,*)
-                    !
-                    k = k + n
-                end do
-                close(10)
-            end do
-        end if
     end subroutine compute_sum
 end module compute_sum_mod
 
