@@ -4,7 +4,7 @@
 0.2332373E-02  dt
 6000000  the_number_of_repetition                                        
 200000  the_number_of_repetition_interval                               
-# atype, atype, eps, sig # LJparameter
+smooth_quad # atype, atype, eps, sig # LJparameter
 1 1 1.0 1.0 3.5
 1 2 3.0953E-01 1.014706E+00 3.5
 1 3 3.0953E-01 1.014706E+00 3.5

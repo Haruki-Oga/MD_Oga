@@ -204,7 +204,8 @@ subroutine read_etc
     ! === calc.dat (second half) ===
     eps(1:natype,1:natype) = -1d0
     sig(1:natype,1:natype) = -1d0
-    read(ifilecalc,*)
+    read(ifilecalc,'(A)') pairstyle
+    write(*,*) pairstyle
     do
         read(ifilecalc,*,iostat=ios) i,j ,r8a,r8b
         if(ios/=0)exit
@@ -472,38 +473,6 @@ subroutine calc_force_pair
     call mpi_reduce(ep_Iam, ep_pair, 1, mpi_real8, &
         mpi_sum, master, mpi_comm_world, ierr)
     !
-contains
-    function fij_lj_smooth_quad(eps,sig,rcsq,rabssq)
-        implicit none
-        double precision eps,sig,rcsq
-        double precision fij_lj_smooth_quad
-        double precision sigsq, rabssq, sbr6, sbrc6, dlja3
-        sigsq = sig*sig
-        sbr6 = (sigsq/rabssq)**3d0
-        sbrc6 = (sigsq/rcsq)**3d0
-        dlja3 = (2d0*sbrc6-1d0)*sbrc6*rabssq/rcsq
-        !dljb = (-7.0d0*sbrc6 + 4.0d0)*sbrc6
-        fij_lj_smooth_quad = 24d0*eps*((2d0*sbr6-1d0)*sbr6 - dlja3)/rabssq
-        ep_Iam = ep_Iam + 4d0*eps*( (sbr6-1d0)*sbr6 &
-            + dlja3*3d0 + (-7d0*sbrc6+4d0)*sbrc6 )
-        return
-    end function fij_lj_smooth_quad
-    function fij_lj_smooth_linear(eps,sig,rcsq,rabssq)
-        implicit none
-        double precision eps,sig,rcsq
-        double precision fij_lj_smooth_linear
-        double precision sigsq, rabssq, sbr6, sbrc6, dlja3, rrci
-        sigsq = sig*sig
-        sbr6 = (sigsq/rabssq)**3d0
-        sbrc6 = (sigsq/rcsq)**3d0
-        dlja3 = (2d0*sbrc6-1d0)*sbrc6
-        rrci = sqrt(rabssq/rcsq)
-        !dljb = (-7.0d0*sbrc6 + 4.0d0)*sbrc6
-        fij_lj_smooth_linear = 24d0*eps*((2d0*sbr6-1d0)*sbr6 - dlja3*rrci)/rabssq
-        ep_Iam = ep_Iam + 4d0*eps*( (sbr6-1d0)*sbr6 - (sbrc6-1d0)*sbrc6 &
-            - 6d0*(rrci-1d0)*dlja3 )
-        return
-    end function fij_lj_smooth_linear
 end subroutine calc_force_pair
 
 subroutine calc_force_bonds
