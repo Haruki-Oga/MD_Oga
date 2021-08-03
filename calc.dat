@@ -1,0 +1,91 @@
+./init/last.dat  # initical condition (atom pos, vel,  etc)
+./init/last.dat  # initical condition
+./result/data/  # output directory (density, etc)
+0.2332373E-02  dt
+6000000  the_number_of_repetition                                        
+200000  the_number_of_repetition_interval                               
+# atype, atype, eps, sig # LJparameter
+1 1 1.0 1.0 3.5
+1 2 3.0953E-01 1.014706E+00 3.5
+1 3 3.0953E-01 1.014706E+00 3.5
+fix
+    fix_freeze 2
+        6 110
+    fix_freeze 1
+        7 111
+    fix_langevin2 3
+        4 110 0.8269 2.8347E-02
+    fix_langevin2  4
+        5 111 0.8269 2.8347E-02
+    #fix_langevin2 3
+    #    4 111 0.744251497 2.8347E-02
+    #fix_langevin2  4
+    #    5 111 0.909640719 2.8347E-02
+    fix_addforce  5
+        6 001 0.0 0.0 -6.249E-02
+    #fix_addforce  6
+    #    7 001 0.0 0.0 10.0
+    #fix_move_linear 6
+    #    6 111 0.1 0.0 0.0
+    #fix_move_linear 7
+    #    7 111 -0.1 0.0 0.0
+    #fix_set_pos 8
+    #    6 110 0.0 0.0 0.0
+    fix_rigid 10
+        6 001
+compute
+    #compute_temp 100
+    #    1 20
+    #compute_temp 101
+    #    2 20
+    #compute_temp 102
+    #    3 20
+    #compute_temp 103
+    #    4 20
+    #compute_temp 104
+    #    5 20
+    #compute_chunk_1d 107
+    #    1 20 3 0.1
+    #compute_chunk_1d 109
+    #    2 20 3 0.1
+    #compute_chunk_1d 110
+    #    3 20 3 0.1
+    #compute_chunk_1d 111
+    #    4 20 3 0.1
+    #compute_chunk_1d 112
+    #    5 20 3 0.1
+    #compute_group_group 113
+    #    1 2 5
+    #compute_group_group 114
+    #    1 3 5
+    #compute_group_group_hf 115
+    #    1 2 5
+    #compute_group_group_hf 116
+    #    1 3 5
+    #compute_ave 200
+    #    4
+    #    ./result/data/ave.dat
+    #    100 101 113 114
+    #compute_ave 201
+    #    4
+    #    ./result/data/hf.dat
+    #    3 4 115 116
+    #compute_correlate 202
+    #    2 5 10000
+    #    ./result/data/hf_GK.dat
+    #    115 1 115 1 116 1 116 1
+    #compute_correlate 203
+    #    4 5 10000
+    #    ./result/data/force_GK.dat
+    #    113 1 113 1 113 2 113 2 114 1 114 1 114 2 114 2
+output
+    #./result/data/langevinene.dat
+    #600000 2
+    #3 4
+    #./result/data/outputtest.dat
+    # 20 3
+    # 100 101 102
+    #./result/data/outputtest2.dat
+    # 40 3
+    # 100 101 102
+  
