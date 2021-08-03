@@ -204,8 +204,7 @@ subroutine read_etc
     ! === calc.dat (second half) ===
     eps(1:natype,1:natype) = -1d0
     sig(1:natype,1:natype) = -1d0
-    read(ifilecalc,'(A)') pairstyle
-    write(*,*) pairstyle
+    read(ifilecalc,*) pairstyle
     do
         read(ifilecalc,*,iostat=ios) i,j ,r8a,r8b
         if(ios/=0)exit
@@ -462,8 +461,7 @@ subroutine calc_force_pair
         rabssq = r(1)*r(1)+r(2)*r(2)+r(3)*r(3) 
         if(rabssq > rcsq) cycle
         !
-        r8 = fij_lj_smooth_quad(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq)
-        !r8 = fij_lj_smooth_linear(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq)
+        r8 = fij_lj(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq, ep_Iam)
         f_Iam(:,li) = f_Iam(:,li) + r8*r(:)
         f_Iam(:,lj) = f_Iam(:,lj) - r8*r(:)
     end do

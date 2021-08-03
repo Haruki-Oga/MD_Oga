@@ -34,34 +34,51 @@ module force_mod
     double precision rc,rcsq
     logical(1),allocatable :: pairflag(:,:)
     character(64) pairstyle
+    !
 contains
-    function fij_lj_smooth_quad(eps,sig,rcsq,rabssq)
+    function fij_lj(eps,sig,rcsq,rabssq,e)
         implicit none
-        double precision eps,sig,rcsq
+        double precision eps,sig,rcsq,rabssq,e
+        double precision fij_lj
+        if(trim(pairstyle)=="smooth_quad")then
+            fij_lj = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
+            return
+        end if
+        if(trim(pairstyle)=="smooth_linear")then
+            fij_lj = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
+            return
+        end if
+        call error_msg("pair_style no match @"//__FILE__)
+    end function fij_lj
+    !
+    function fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
+        implicit none
+        double precision eps,sig,rcsq, rabssq,e
         double precision fij_lj_smooth_quad
-        double precision sigsq, rabssq, sbr6, sbrc6, dlja3
+        double precision sigsq, sbr6, sbrc6, dlja3
         sigsq = sig*sig
         sbr6 = (sigsq/rabssq)**3d0
         sbrc6 = (sigsq/rcsq)**3d0
         dlja3 = (2d0*sbrc6-1d0)*sbrc6*rabssq/rcsq
         !dljb = (-7.0d0*sbrc6 + 4.0d0)*sbrc6
         fij_lj_smooth_quad = 24d0*eps*((2d0*sbr6-1d0)*sbr6 - dlja3)/rabssq
-        ep_Iam = ep_Iam + 4d0*eps*( (sbr6-1d0)*sbr6 &
+        e = e + 4d0*eps*( (sbr6-1d0)*sbr6 &
             + dlja3*3d0 + (-7d0*sbrc6+4d0)*sbrc6 )
         return
     end function fij_lj_smooth_quad
-    function fij_lj_smooth_linear(eps,sig,rcsq,rabssq)
+    !
+    function fij_lj_smooth_linear(eps,sig,rcsq,rabssq,e)
         implicit none
-        double precision eps,sig,rcsq
+        double precision eps,sig,rcsq, rabssq, e
         double precision fij_lj_smooth_linear
-        double precision sigsq, rabssq, sbr6, sbrc6, dlja3, rrci
+        double precision sigsq, sbr6, sbrc6, dlja3, rrci
         sigsq = sig*sig
         sbr6 = (sigsq/rabssq)**3d0
         sbrc6 = (sigsq/rcsq)**3d0
         dlja3 = (2d0*sbrc6-1d0)*sbrc6
         rrci = sqrt(rabssq/rcsq)
         fij_lj_smooth_linear = 24d0*eps*((2d0*sbr6-1d0)*sbr6 - dlja3*rrci)/rabssq
-        ep_Iam = ep_Iam + 4d0*eps*( (sbr6-1d0)*sbr6 - (sbrc6-1d0)*sbrc6 &
+        e = e + 4d0*eps*( (sbr6-1d0)*sbr6 - (sbrc6-1d0)*sbrc6 &
             - 6d0*(rrci-1d0)*dlja3 )
         return
     end function fij_lj_smooth_linear
