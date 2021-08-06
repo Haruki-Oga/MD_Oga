@@ -34,17 +34,18 @@ module force_mod
     double precision rc,rcsq
     logical(1),allocatable :: pairflag(:,:)
     character(64) pairstyle
+    logical(1) :: smooth_quad = .false., smooth_linear = .false.
     !
 contains
     function fij_lj(eps,sig,rcsq,rabssq,e)
         implicit none
         double precision eps,sig,rcsq,rabssq,e
         double precision fij_lj
-        if(trim(pairstyle)=="smooth_quad")then
+        if(smooth_quad)then
             fij_lj = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
             return
         end if
-        if(trim(pairstyle)=="smooth_linear")then
+        if(smooth_linear)then
             fij_lj = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
             return
         end if
