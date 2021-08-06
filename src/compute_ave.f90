@@ -84,7 +84,7 @@ contains
                 n = nfcdata(j)
                 avedata(k+1:k+n) = avedata(k+1:k+n) + fcdata(i0+1:i0+n)
                 ! --- return ---
-                fcdata(i0fcdata(myfc(i))+k+1:i0fcdata(myfc(i))+k+n) = avedata(k+1:k+n)
+                fcdata(i0fcdata(myfc(i))+1:i0fcdata(myfc(i))+n) = avedata(k+1:k+n)
                 !
                 k = k + n
             end do
