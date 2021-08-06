@@ -107,7 +107,7 @@ contains
         use force_mod
         use book_keep_mod, only: nlistbk=>nlist, listbki=>listi, listbkj=>listj
         implicit none
-        double precision r(3), rabssq, r8
+        double precision r(3), rabssq, r8, e
         integer ilistbk,li,lj
         integer :: typeflag = 0
         !
@@ -134,7 +134,7 @@ contains
                 cycle
             end if
             !
-            r8 = fij(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rabssq)
+            r8 = fij_lj(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq, e)
             cforce_Iam(:,li,ilist) = cforce_Iam(:,li,ilist) + r8*r(:)
             cforce_Iam(:,lj,ilist) = cforce_Iam(:,lj,ilist) - r8*r(:)
             typeflag = 0
@@ -143,17 +143,6 @@ contains
         call mpi_reduce(cforce_Iam(:,:,ilist), cforce_pair(:,:,ilist), 3*nmol, mpi_real8, &
             mpi_sum, master, mpi_comm_world, ierr)
         !
-    contains
-        function fij(eps,sig,rabssq)
-            implicit none
-            double precision eps,sig
-            double precision fij
-            double precision sigsq, rabssq, sbr6, dlja3
-            sigsq = sig*sig
-            sbr6 = (sigsq/rabssq)**3d0
-            fij = 24d0*eps*(2d0*sbr6-1d0)*sbr6/rabssq
-            return
-        end function fij
     end subroutine calc_force_pair
 
     subroutine calc_force_bonds
