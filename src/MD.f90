@@ -223,6 +223,7 @@ subroutine read_etc
     !
 end subroutine read_etc
 
+
 subroutine init_const
     use commn
     use mpivar
