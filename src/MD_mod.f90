@@ -33,6 +33,56 @@ module force_mod
     double precision ep_Iam, ep_pair, ep_bonds, dpssqmax
     double precision rc,rcsq
     logical(1),allocatable :: pairflag(:,:)
+    character(64) pairstyle
+    logical(1) :: smooth_quad = .false., smooth_linear = .false.
+    !
+contains
+    function fij_lj(eps,sig,rcsq,rabssq,e)
+        implicit none
+        double precision eps,sig,rcsq,rabssq,e
+        double precision fij_lj
+        if(smooth_quad)then
+            fij_lj = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
+            return
+        end if
+        if(smooth_linear)then
+            fij_lj = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
+            return
+        end if
+        call error_msg("pair_style no match @"//__FILE__)
+    end function fij_lj
+    !
+    function fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
+        implicit none
+        double precision eps,sig,rcsq, rabssq,e
+        double precision fij_lj_smooth_quad
+        double precision sigsq, sbr6, sbrc6, dlja3
+        sigsq = sig*sig
+        sbr6 = (sigsq/rabssq)**3d0
+        sbrc6 = (sigsq/rcsq)**3d0
+        dlja3 = (2d0*sbrc6-1d0)*sbrc6*rabssq/rcsq
+        !dljb = (-7.0d0*sbrc6 + 4.0d0)*sbrc6
+        fij_lj_smooth_quad = 24d0*eps*((2d0*sbr6-1d0)*sbr6 - dlja3)/rabssq
+        e = e + 4d0*eps*( (sbr6-1d0)*sbr6 &
+            + dlja3*3d0 + (-7d0*sbrc6+4d0)*sbrc6 )
+        return
+    end function fij_lj_smooth_quad
+    !
+    function fij_lj_smooth_linear(eps,sig,rcsq,rabssq,e)
+        implicit none
+        double precision eps,sig,rcsq, rabssq, e
+        double precision fij_lj_smooth_linear
+        double precision sigsq, sbr6, sbrc6, dlja3, rrci
+        sigsq = sig*sig
+        sbr6 = (sigsq/rabssq)**3d0
+        sbrc6 = (sigsq/rcsq)**3d0
+        dlja3 = (2d0*sbrc6-1d0)*sbrc6
+        rrci = sqrt(rabssq/rcsq)
+        fij_lj_smooth_linear = 24d0*eps*((2d0*sbr6-1d0)*sbr6 - dlja3*rrci)/rabssq
+        e = e + 4d0*eps*( (sbr6-1d0)*sbr6 - (sbrc6-1d0)*sbrc6 &
+            - 6d0*(rrci-1d0)*dlja3 )
+        return
+    end function fij_lj_smooth_linear
 end module force_mod
 
 module book_keep_mod
