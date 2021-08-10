@@ -80,7 +80,7 @@ subroutine read_etc
     implicit none
     integer i,j,ios,imol
     double precision r8a, r8b
-    character(128) char_cmt
+    character(128) char_cmt,chartest
     character(1) :: sharp = "#"
     !
     ! === read calc.dat (half way) ===
@@ -110,8 +110,23 @@ subroutine read_etc
     read(ifileinit,*)
     read(ifileinit,*) nmol
     read(ifileinit,*) natype
-    read(ifileinit,*) nbonds
-    read(ifileinit,*) nbtype
+    write(*,*) Iam, "before nbonds"
+    nbonds = 0
+    read(ifileinit,*,iostat=ios) nbonds
+    write(*,*) Iam, "after nbonds"
+    if(ios/=0 .or. nbonds==0)then
+        nbonds = 0
+        nbtype = 0
+        write(*,*) Iam, "aaa"
+        rewind(ifileinit)
+        read(ifileinit,*)
+        read(ifileinit,*)
+        read(ifileinit,*)
+        read(ifileinit,*)
+    else
+        read(ifileinit,*) nbtype
+        write(*,*) Iam, nbtype, nbonds
+    end if
     !
     allocate(wm(1:natype), k(1:nbtype), r_eq(1:nbtype))
     allocate(sig(1:natype,1:natype),eps(1:natype,1:natype))
@@ -145,30 +160,34 @@ subroutine read_etc
     do j=1,natype
         read(ifileinit,*) i, wm(i)
     end do
-    read(ifileinit,*)
-    read(ifileinit,*)
-    read(ifileinit,*)
-    do j=1,nbtype
-        read(ifileinit,*) i,k(i), r_eq(i)
-    end do
-    read(ifileinit,*)
-    read(ifileinit,*)
-    read(ifileinit,*)
-    do imol=1,nmol
-        read(ifileinit,*) i, j, atype(i), p(:,i)
-    end do
-    read(ifileinit,*)
-    read(ifileinit,*)
-    read(ifileinit,*)
-    do imol=1,nmol
-        read(ifileinit,*) i, v(:,i)
-    end do
-    read(ifileinit,*)
-    read(ifileinit,*)
-    read(ifileinit,*)
-    do j=1,nbonds
-        read(ifileinit,*) i,btype(i), bondi(i), bondj(i)
-    end do
+    if(nbtype/=0)then
+        read(ifileinit,*)
+        read(ifileinit,*)
+        read(ifileinit,*)
+        do j=1,nbtype
+            read(ifileinit,*) i,k(i), r_eq(i)
+        end do
+    end if
+        read(ifileinit,*)
+        read(ifileinit,*)
+        read(ifileinit,*)
+        do imol=1,nmol
+            read(ifileinit,*) i, j, atype(i), p(:,i)
+        end do
+        read(ifileinit,*)
+        read(ifileinit,*)
+        read(ifileinit,*)
+        do imol=1,nmol
+            read(ifileinit,*) i, v(:,i)
+        end do
+    if(nbtype/=0)then
+        read(ifileinit,*)
+        read(ifileinit,*)
+        read(ifileinit,*)
+        do j=1,nbonds
+            read(ifileinit,*) i,btype(i), bondi(i), bondj(i)
+        end do
+    end if
     close(ifileinit)
     !
     ! --- create atom type list ---
