@@ -110,14 +110,11 @@ subroutine read_etc
     read(ifileinit,*)
     read(ifileinit,*) nmol
     read(ifileinit,*) natype
-    write(*,*) Iam, "before nbonds"
     nbonds = 0
     read(ifileinit,*,iostat=ios) nbonds
-    write(*,*) Iam, "after nbonds"
     if(ios/=0 .or. nbonds==0)then
         nbonds = 0
         nbtype = 0
-        write(*,*) Iam, "aaa"
         rewind(ifileinit)
         read(ifileinit,*)
         read(ifileinit,*)
@@ -125,7 +122,6 @@ subroutine read_etc
         read(ifileinit,*)
     else
         read(ifileinit,*) nbtype
-        write(*,*) Iam, nbtype, nbonds
     end if
     !
     allocate(wm(1:natype), k(1:nbtype), r_eq(1:nbtype))
