@@ -33,13 +33,13 @@ contains
                 !
                 nfc = nfc + 1
                 fcnum = [fcnum, ifc]
-                if(fixchar=="fix_langevin") call init_fix_langevin
-                if(fixchar=="fix_langevin2") call init_fix_langevin2
-                if(fixchar=="fix_addforce") call init_fix_addforce
-                if(fixchar=="fix_move_linear") call init_fix_move_linear
-                if(fixchar=="fix_set_pos") call init_fix_set_pos
-                if(fixchar=="fix_rigid") call init_fix_rigid
-                if(fixchar=="fix_freeze") call init_fix_freeze
+                if(fixchar=="fix_langevin" .or. fixchar=="FixLangevin") call init_fix_langevin
+                if(fixchar=="fix_langevin2" .or. fixchar=="FixLangevin2") call init_fix_langevin2
+                if(fixchar=="fix_addforce" .or. fixchar=="FixAddforce") call init_fix_addforce
+                if(fixchar=="fix_move_linear" .or. fixchar=="FixMoveLinear") call init_fix_move_linear
+                if(fixchar=="fix_set_pos" .or. fixchar=="FixSetPos") call init_fix_set_pos
+                if(fixchar=="fix_rigid" .or. fixchar=="FixRigid") call init_fix_rigid
+                if(fixchar=="fix_freeze" .or. fixchar=="FixFreeze") call init_fix_freeze
                 ! --- calc fcnumi ---
                 if(size(fcnumi) < ifc)then
                     do i=1,ifc-size(fcnumi)
