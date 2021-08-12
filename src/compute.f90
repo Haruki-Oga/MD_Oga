@@ -10,6 +10,7 @@ contains
         use compute_compv_mod, only : init_compute_compv
         use compute_gg_mod, only : init_compute_gg
         use compute_gg_hf_mod, only : init_compute_gg_hf
+        use compute_gg_VAstress_mod, only : init_compute_gg_VAstress
         use compute_sum_mod, only : init_compute_sum
         use compute_correlate_mod, only : init_compute_correlate
         use compute_ave_mod, only : init_compute_ave
@@ -38,6 +39,7 @@ contains
             end if
             if(comchar=="compute_groupgroup" .or. comchar=="compute_gg" .or. comchar=="ComputeGg") call init_compute_gg
             if(comchar=="compute_groupgroup_hf" .or. comchar=="compute_gg_hf" .or. comchar=="ComputeGgHf") call init_compute_gg_hf
+            if(comchar=="compute_gg_VAstress" .or. comchar=="ComputeGg") call init_compute_gg_VAstress
             !
             if(Iam==master)then
                 if(comchar=="compute_sum" .or. comchar=="ComputeSum") call init_compute_sum
@@ -74,6 +76,7 @@ contains
         use compute_compv_mod, only : compute_compv
         use compute_gg_mod, only : compute_gg
         use compute_gg_hf_mod, only : compute_gg_hf
+        use compute_gg_VAstress_mod, only : compute_gg_VAstress
         use compute_sum_mod, only : compute_sum
         use compute_correlate_mod, only : compute_correlate
         use compute_ave_mod, only : compute_ave
@@ -87,6 +90,7 @@ contains
         !
         call compute_gg
         call compute_gg_hf
+        call compute_gg_VAstress
         !
         if(Iam==master)then
             call compute_sum

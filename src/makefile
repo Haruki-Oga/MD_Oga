@@ -8,7 +8,7 @@ SRCS = subroutine_function.f90 MD_mod.f90 fix_compute_mod.f90\
 	  fix_rigid.f90\
 	  fix.f90\
 	  compute_temp.f90 compute_chunk_1d.f90 compute_compv.f90\
-	  compute_gg.f90 compute_gg_hf.f90\
+	  compute_gg.f90 compute_gg_hf.f90 compute_gg_VAstress.f90\
 	  compute_sum.f90 compute_correlate.f90 compute_ave.f90\
 	  compute.f90\
 	  output.f90\

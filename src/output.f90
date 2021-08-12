@@ -133,7 +133,6 @@ contains
         use update_mod
         use file_mod
         use constant_mod
-        !use output_mod
         implicit none
         real(4) r43(3)
         integer i
@@ -155,9 +154,6 @@ contains
             !
         end if
     end subroutine output_posb
-
-
-
 
     subroutine last_output
         use mpivar
