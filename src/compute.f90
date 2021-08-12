@@ -36,8 +36,8 @@ contains
                 if(comchar=="compute_chunk_1d" .or. comchar=="ComputeChunk1d") call init_compute_chunk_1d
                 if(comchar=="compute_compv" .or. comchar=="ComputeCompv") call init_compute_compv
             end if
-            if(comchar=="compute_gg" .or. comchar=="ComputeGg") call init_compute_gg
-            if(comchar=="compute_gg_hf" .or. comchar=="ComputeGgHf") call init_compute_gg_hf
+            if(comchar=="compute_groupgroup" .or. comchar=="compute_gg" .or. comchar=="ComputeGg") call init_compute_gg
+            if(comchar=="compute_groupgroup_hf" .or. comchar=="compute_gg_hf" .or. comchar=="ComputeGgHf") call init_compute_gg_hf
             !
             if(Iam==master)then
                 if(comchar=="compute_sum" .or. comchar=="ComputeSum") call init_compute_sum

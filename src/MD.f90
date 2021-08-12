@@ -220,8 +220,14 @@ subroutine read_etc
     eps(1:natype,1:natype) = -1d0
     sig(1:natype,1:natype) = -1d0
     read(ifilecalc,*) pairstyle
-    if(trim(pairstyle)=="smooth_quad") smooth_quad = .true.
-    if(trim(pairstyle)=="smooth_linear") smooth_linear = .true.
+    if(trim(pairstyle)=="smooth_quad")then
+        smooth_quad = .true.
+    else if(trim(pairstyle)=="smooth_linear")then
+        smooth_linear = .true.
+    else
+        smooth_quad = .true.
+    end if
+    !
     do
         read(ifilecalc,*,iostat=ios) i,j ,r8a,r8b
         if(ios/=0)exit
