@@ -9,9 +9,7 @@ contains
         use compute_chunk_1d_mod, only : init_compute_chunk_1d
         use compute_compv_mod, only : init_compute_compv
         use compute_gg_mod, only : init_compute_gg
-        use compute_ggq_mod, only : init_compute_ggq
         use compute_gg_hf_mod, only : init_compute_gg_hf
-        use compute_ggq_hf_mod, only : init_compute_ggq_hf
         use compute_sum_mod, only : init_compute_sum
         use compute_correlate_mod, only : init_compute_correlate
         use compute_ave_mod, only : init_compute_ave
@@ -34,21 +32,19 @@ contains
             if(ios>0) cycle ! call error_msg("read error @init_compute")
             ! --- init_compute ---
             if(Iam==master)then
-                if(comchar=="compute_temp") call init_compute_temp
-                if(comchar=="compute_chunk_1d") call init_compute_chunk_1d
-                if(comchar=="compute_compv") call init_compute_compv
+                if(comchar=="compute_temp" .or. comchar=="ComputeTemp") call init_compute_temp
+                if(comchar=="compute_chunk_1d" .or. comchar=="ComputeChunk1d") call init_compute_chunk_1d
+                if(comchar=="compute_compv" .or. comchar=="ComputeCompv") call init_compute_compv
             end if
-            if(comchar=="compute_gg") call init_compute_gg
-            if(comchar=="compute_ggq") call init_compute_ggq
-            if(comchar=="compute_gg_hf") call init_compute_gg_hf
-            if(comchar=="compute_ggq_hf") call init_compute_ggq_hf
+            if(comchar=="compute_gg" .or. comchar=="ComputeGg") call init_compute_gg
+            if(comchar=="compute_gg_hf" .or. comchar=="ComputeGgHf") call init_compute_gg_hf
             !
             if(Iam==master)then
-                if(comchar=="compute_sum") call init_compute_sum
+                if(comchar=="compute_sum" .or. comchar=="ComputeSum") call init_compute_sum
             end if
-            if(comchar=="compute_correlate") call init_compute_correlate
+            if(comchar=="compute_correlate" .or. comchar=="ComputeCorrelate") call init_compute_correlate
             if(Iam==master)then
-                if(comchar=="compute_ave") call init_compute_ave
+                if(comchar=="compute_ave" .or. comchar=="ComputeAve") call init_compute_ave
             end if
             ! ---
         end do
@@ -77,9 +73,7 @@ contains
         use compute_chunk_1d_mod, only : compute_chunk_1d
         use compute_compv_mod, only : compute_compv
         use compute_gg_mod, only : compute_gg
-        use compute_ggq_mod, only : compute_ggq
         use compute_gg_hf_mod, only : compute_gg_hf
-        use compute_ggq_hf_mod, only : compute_ggq_hf
         use compute_sum_mod, only : compute_sum
         use compute_correlate_mod, only : compute_correlate
         use compute_ave_mod, only : compute_ave
@@ -92,9 +86,7 @@ contains
         end if
         !
         call compute_gg
-        call compute_ggq
         call compute_gg_hf
-        call compute_ggq_hf
         !
         if(Iam==master)then
             call compute_sum
