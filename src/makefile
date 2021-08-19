@@ -1,7 +1,7 @@
 .SUFFIXES: .f90
 .SUFFIXES: .o
 FC = mpif90
-FCOPT = -O2 -fpp # -CB
+FCOPT = -O2 -fpp -CB
 EXE = MD.out
 SRCS = subroutine_function.f90 MD_mod.f90 fix_compute_mod.f90\
 	  fix_freeze.f90 fix_langevin.f90 fix_langevin2.f90 fix_move_linear.f90 fix_set_pos.f90 fix_addforce.f90\
