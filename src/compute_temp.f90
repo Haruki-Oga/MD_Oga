@@ -13,10 +13,15 @@ contains
         use file_mod
         use constant_mod
         use fix_compute_mod
+        use mpivar
         implicit none
         integer i, ios, iatype
         double precision,allocatable :: a(:)
         !
+        if(Iam/=master)then
+            read(ifilecalc,*)
+            return
+        end if
         nfc = nfc + 1
         ! === read conf file ===
         read(ifilecalc,*) iatype, i

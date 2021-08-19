@@ -342,7 +342,7 @@ subroutine book_keep
     use update_mod , only : dps, atype
     use book_keep_mod
     use time_mod
-    use force_mod, only : pairflag
+    use force_mod, only : pairflag, dpssqmax
     implicit none
     double precision r(3),rabssq
     integer i,j,l,m,nlistmax , nlistmin, iatpairlist, iatype, jatype, m0

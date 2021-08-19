@@ -14,11 +14,19 @@ contains
         use file_mod
         use constant_mod
         use fix_compute_mod
+        use mpivar
         implicit none
         integer i, ios, iatype, navefcnow, ndata_now
         double precision,allocatable :: a(:)
         character(64) form1
         character(128) char1
+        !
+        if(Iam/=master)then
+            read(ifilecalc,*)
+            read(ifilecalc,*)
+            read(ifilecalc,*)
+            return
+        end if
         !
         nfc = nfc + 1
         ! === read conf file ===
