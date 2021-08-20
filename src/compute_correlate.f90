@@ -122,8 +122,8 @@ contains
         end do
         ! --- output ---
         if(irep/=nrep) return
-        !call mpi_reduce(cordata_Iam, cordata, size(cordata), mpi_real8,&
-        !    mpi_sum, master, mpi_comm_world, ierr)
+        call mpi_reduce(cordata_Iam, cordata, size(cordata), mpi_real8,&
+            mpi_sum, master, mpi_comm_world, ierr)
         if(Iam/=master) return
         !k = 0
         do i=1,nlist
