@@ -89,6 +89,17 @@ function char_dim(idim)
     if(idim==3) char_dim = "z"
 end function char_dim
 
+function dim_char(cdim)
+    implicit none
+    character(1) cdim
+    integer dim_char
+    dim_char = 0
+    if(cdim=="x") dim_char = 1
+    if(cdim=="y") dim_char = 2
+    if(cdim=="z") dim_char = 3
+    if(dim_char==0) call error_msg("error@dim_char")
+end function dim_char
+
 function dim_true(n,idim)
     implicit none
     logical(1) dim_true

@@ -9,6 +9,7 @@ contains
         use fix_langevin_mod, only : init_fix_langevin
         use fix_langevin2_mod, only : init_fix_langevin2
         use fix_move_linear_mod, only : init_fix_move_linear
+        use fix_move_wiggle_mod, only : init_fix_move_wiggle
         use fix_set_pos_mod, only : init_fix_set_pos
         use fix_addforce_mod, only : init_fix_addforce
         use fix_rigid_mod, only : init_fix_rigid
@@ -37,6 +38,7 @@ contains
                 if(fixchar=="fix_langevin2" .or. fixchar=="FixLangevin2") call init_fix_langevin2
                 if(fixchar=="fix_addforce" .or. fixchar=="FixAddforce") call init_fix_addforce
                 if(fixchar=="fix_move_linear" .or. fixchar=="FixMoveLinear") call init_fix_move_linear
+                if(fixchar=="fix_move_wiggle" .or. fixchar=="FixMovewiggle") call init_fix_move_wiggle
                 if(fixchar=="fix_set_pos" .or. fixchar=="FixSetPos") call init_fix_set_pos
                 if(fixchar=="fix_rigid" .or. fixchar=="FixRigid") call init_fix_rigid
                 if(fixchar=="fix_freeze" .or. fixchar=="FixFreeze") call init_fix_freeze
@@ -58,6 +60,7 @@ contains
         use fix_langevin_mod, only : fix_langevin
         use fix_langevin2_mod, only : fix_langevin2
         use fix_move_linear_mod, only : fix_move_linear
+        use fix_move_wiggle_mod, only : fix_move_wiggle
         use fix_set_pos_mod, only : fix_set_pos
         use fix_addforce_mod, only : fix_addforce
         use fix_rigid_mod, only : fix_rigid
@@ -67,6 +70,7 @@ contains
         call fix_langevin
         call fix_langevin2
         call fix_move_linear
+        call fix_move_wiggle
         call fix_set_pos
         call fix_addforce
         call fix_rigid
@@ -78,6 +82,7 @@ contains
         use fix_langevin_mod, only : fix_langevin_compute
         use fix_langevin2_mod, only : fix_langevin2_compute
         use fix_move_linear_mod, only : fix_move_linear_compute
+        use fix_move_wiggle_mod, only : fix_move_wiggle_compute
         use fix_set_pos_mod, only : fix_set_pos_compute
         use fix_addforce_mod, only : fix_addforce_compute
         !use fix_rigid_mod
@@ -86,6 +91,7 @@ contains
         call fix_langevin_compute
         call fix_langevin2_compute
         call fix_move_linear_compute
+        call fix_move_wiggle_compute
         call fix_set_pos_compute
         call fix_addforce_compute
 
