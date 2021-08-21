@@ -8,6 +8,7 @@ contains
         use fix_freeze_mod, only : init_fix_freeze
         use fix_langevin_mod, only : init_fix_langevin
         use fix_langevin2_mod, only : init_fix_langevin2
+        use fix_langevin3_mod, only : init_fix_langevin3
         use fix_move_linear_mod, only : init_fix_move_linear
         use fix_move_wiggle_mod, only : init_fix_move_wiggle
         use fix_set_pos_mod, only : init_fix_set_pos
@@ -36,6 +37,7 @@ contains
                 fcnum = [fcnum, ifc]
                 if(fixchar=="fix_langevin" .or. fixchar=="FixLangevin") call init_fix_langevin
                 if(fixchar=="fix_langevin2" .or. fixchar=="FixLangevin2") call init_fix_langevin2
+                if(fixchar=="fix_langevin3" .or. fixchar=="FixLangevin3") call init_fix_langevin3
                 if(fixchar=="fix_addforce" .or. fixchar=="FixAddforce") call init_fix_addforce
                 if(fixchar=="fix_move_linear" .or. fixchar=="FixMoveLinear") call init_fix_move_linear
                 if(fixchar=="fix_move_wiggle" .or. fixchar=="FixMovewiggle") call init_fix_move_wiggle
@@ -59,6 +61,7 @@ contains
         use fix_freeze_mod, only : fix_freeze
         use fix_langevin_mod, only : fix_langevin
         use fix_langevin2_mod, only : fix_langevin2
+        use fix_langevin3_mod, only : fix_langevin3
         use fix_move_linear_mod, only : fix_move_linear
         use fix_move_wiggle_mod, only : fix_move_wiggle
         use fix_set_pos_mod, only : fix_set_pos
@@ -69,6 +72,7 @@ contains
         call fix_freeze
         call fix_langevin
         call fix_langevin2
+        call fix_langevin3
         call fix_move_linear
         call fix_move_wiggle
         call fix_set_pos
@@ -81,6 +85,7 @@ contains
         !use fix_freeze_mod
         use fix_langevin_mod, only : fix_langevin_compute
         use fix_langevin2_mod, only : fix_langevin2_compute
+        use fix_langevin3_mod, only : fix_langevin3_compute
         use fix_move_linear_mod, only : fix_move_linear_compute
         use fix_move_wiggle_mod, only : fix_move_wiggle_compute
         use fix_set_pos_mod, only : fix_set_pos_compute
@@ -90,6 +95,7 @@ contains
 
         call fix_langevin_compute
         call fix_langevin2_compute
+        call fix_langevin3_compute
         call fix_move_linear_compute
         call fix_move_wiggle_compute
         call fix_set_pos_compute
