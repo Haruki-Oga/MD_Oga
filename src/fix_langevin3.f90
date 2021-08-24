@@ -34,7 +34,7 @@ contains
         dimlist = reshape( [a,int3], [3,nlist+1] )
         !
         gamma_in = wm(iatype)/gamma_in
-        sigR_in = sqrt(2d0*gamma_in*bk*tsetL_in/dt)
+        sigR_in = sqrt(gamma_in*bk*tsetL_in*dt)/wm(iatype)
         tsetL = [tsetL,tsetL_in]
         gamma = [gamma,gamma_in]
         sigR = [sigR,sigR_in]
@@ -75,14 +75,14 @@ contains
             do i=1,natseq(atlist(j))
                 imol = imolatseq(i0atseq(atlist(j)) + i)
                 if( pflag )then
-                    call random3(r83,sigR(j)/sqrt(2d0),0.0d0)
-                    v2dt(:,imol) = v(:,imol) + dt_wmi2(atlist(j))*(f(:,imol) - wm(atlist(j))*gamma(j)*v(:,imol)) + r83(:)
+                    call random3(r83,sigR(j),0.0d0)
+                    v2dt(:,imol) = v(:,imol) + dt_wmi2(atlist(j))*(f(:,imol) - gamma(j)*v(:,imol)) + r83(:)
                     dp(:,imol) = dimlist(:,j)*(v2dt(:,imol)*dt) + (1d0-dimlist(:,j))*dp(:,imol)
                 end if
                 if( vflag )then
-                    call random3(r83,sigR(j)/sqrt(2d0),0.0d0)
-                    v(:,imol) = dimlist(:,j)*(v2dt(:,imol) - dt_wmi2(atlist(j))*(f(:,imol) - wm(atlist(j))*gamma(j)*v2dt(:,imol))) &
-                        + (1d0-dimlist(:,j))*v(:,imol)
+                    call random3(r83,sigR(j),0.0d0)
+                    v(:,imol) = dimlist(:,j)*(v2dt(:,imol) + dt_wmi2(atlist(j))*(f(:,imol) - gamma(j)*v2dt(:,imol)) &
+                        + r83(:) ) + (1d0-dimlist(:,j))*v(:,imol)
                 end if
             end do
         end do
