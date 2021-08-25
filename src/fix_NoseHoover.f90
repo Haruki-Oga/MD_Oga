@@ -77,7 +77,7 @@ contains
                 imol = imolatseq(i0atseq(atlist(j)) + i)
                 temp_now = temp_now + sum(v(:,imol)**2d0)
             end do
-            temp_now = temp_now*wm(atlist(j))/3d0/bk
+            temp_now = temp_now*wm(atlist(j))/3d0/bk/natseq(atlist(j))
             do i=1,natseq(atlist(j))
                 imol = imolatseq(i0atseq(atlist(j)) + i)
                 ! --- langevin thermostat ---

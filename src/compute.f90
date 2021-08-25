@@ -35,8 +35,8 @@ contains
             if(comchar=="compute_temp" .or. comchar=="ComputeTemp") call init_compute_temp
             if(comchar=="compute_chunk_1d" .or. comchar=="ComputeChunk1d") call init_compute_chunk_1d
             if(comchar=="compute_compv" .or. comchar=="ComputeCompv") call init_compute_compv
-            if(comchar=="compute_groupgroup" .or. comchar=="compute_gg" .or. comchar=="ComputeGg") call init_compute_gg
-            if(comchar=="compute_groupgroup_hf" .or. comchar=="compute_gg_hf" .or. comchar=="ComputeGgHf") call init_compute_gg_hf
+            if(comchar=="compute_group_group" .or. comchar=="compute_gg" .or. comchar=="ComputeGg") call init_compute_gg
+            if(comchar=="compute_group_group_hf" .or. comchar=="compute_gg_hf" .or. comchar=="ComputeGgHf") call init_compute_gg_hf
             if(comchar=="compute_gg_VAstress" .or. comchar=="ComputeGg") call init_compute_gg_VAstress
             !
             if(comchar=="compute_sum" .or. comchar=="ComputeSum") call init_compute_sum
