@@ -88,11 +88,6 @@ contains
                     imol = imolatseq(i0atseq(atlist(i)) + j)
                     fsum(:,i) = fsum(:,i) + f(:,imol)
                 end do
-                !
-                do j=1,natseq(atlist(i))
-                    imol = imolatseq(i0atseq(atlist(i)) + j)
-                    f(:,imol) = dimlist(:,i)*fsum(:,i)/natseq(atlist(i)) + (1-dimlist(:,i))*f(:,imol)
-                end do
             end do
         end if
         !

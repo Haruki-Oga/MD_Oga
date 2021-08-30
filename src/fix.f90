@@ -15,6 +15,7 @@ contains
         use fix_set_pos_mod, only : init_fix_set_pos
         use fix_addforce_mod, only : init_fix_addforce
         use fix_rigid_mod, only : init_fix_rigid
+        use fix_rigid_rotate_mod, only : init_fix_rigid_rotate
         implicit none
         character(1) :: sharp = "#"
         character(64) fixchar
@@ -45,6 +46,7 @@ contains
                 if(fixchar=="fix_move_wiggle" .or. fixchar=="FixMovewiggle") call init_fix_move_wiggle
                 if(fixchar=="fix_set_pos" .or. fixchar=="FixSetPos") call init_fix_set_pos
                 if(fixchar=="fix_rigid" .or. fixchar=="FixRigid") call init_fix_rigid
+                if(fixchar=="fix_rigid_rotate" .or. fixchar=="FixRigidRotate") call init_fix_rigid_rotate
                 if(fixchar=="fix_freeze" .or. fixchar=="FixFreeze") call init_fix_freeze
                 ! --- calc fcnumi ---
                 if(size(fcnumi) < ifc)then
@@ -70,6 +72,7 @@ contains
         use fix_set_pos_mod, only : fix_set_pos
         use fix_addforce_mod, only : fix_addforce
         use fix_rigid_mod, only : fix_rigid
+        use fix_rigid_rotate_mod, only : fix_rigid_rotate
         implicit none
         !
         call fix_freeze
@@ -82,6 +85,7 @@ contains
         call fix_set_pos
         call fix_addforce
         call fix_rigid
+        call fix_rigid_rotate
     end subroutine fix
 
     subroutine fix_compute
