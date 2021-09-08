@@ -60,18 +60,20 @@ contains
         use constant_mod
         implicit none
         integer i,j,imol
-        double precision pmove(3),vmove(3)
+        double precision dpmove(3),vmove(3)
         !
         if( fflag ) return
         !
         do i=1,nlist
-            pmove(:) = amove(:,i)*sin(2d0*pi*irep*dt/period(i) + theta(i))
+            ! dpmove(:) = amove(:,i)*(sin(2d0*pi*irep*dt/period(i) + theta(i)) - &
+            !     sin(2d0*pi*(irep-1)*dt/period(i) + theta(i)) )
             vmove(:) = 2d0*pi/period(i)*amove(:,i)*cos(2d0*pi*irep*dt/period(i) + theta(i))
+            dpmove(:) = vmove(:)*dt
             do j=1,natseq(atlist(i))
                 imol = imolatseq(i0atseq(atlist(i)) + j)
                 ! --- freeze atom ---
                 ! dimlist = 1 or 0
-                if( pflag ) dp(:,imol) = dimlist(:,i)*pmove(:) + (1-dimlist(:,i))*dp(:,imol)
+                if( pflag ) dp(:,imol) = dimlist(:,i)*dpmove(:) + (1-dimlist(:,i))*dp(:,imol)
                 if( vflag ) v(:,imol) = dimlist(:,i)*vmove(:) + (1-dimlist(:,i))*v(:,imol)
                 ! ---
             end do

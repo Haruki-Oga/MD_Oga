@@ -14,6 +14,7 @@ contains
         use compute_sum_mod, only : init_compute_sum
         use compute_correlate_mod, only : init_compute_correlate
         use compute_ave_mod, only : init_compute_ave
+        use compute_ave_period_mod, only : init_compute_ave_period
         implicit none
         character(1) :: sharp = "#"
         character(64) comchar
@@ -42,6 +43,7 @@ contains
             if(comchar=="compute_sum" .or. comchar=="ComputeSum") call init_compute_sum
             if(comchar=="compute_correlate" .or. comchar=="ComputeCorrelate") call init_compute_correlate
             if(comchar=="compute_ave" .or. comchar=="ComputeAve") call init_compute_ave
+            if(comchar=="compute_ave_period" .or. comchar=="ComputeAvePeriod") call init_compute_ave_period
             ! ---
         end do
         close(ifilecalc)
@@ -75,6 +77,7 @@ contains
         use compute_sum_mod, only : compute_sum
         use compute_correlate_mod, only : compute_correlate
         use compute_ave_mod, only : compute_ave
+        use compute_ave_period_mod, only : compute_ave_period
         implicit none
         !
         if(Iam==master)then
@@ -93,6 +96,7 @@ contains
         call compute_correlate
         if(Iam==master)then
             call compute_ave
+            call compute_ave_period
         end if
     end subroutine compute
 end module compute_mod
