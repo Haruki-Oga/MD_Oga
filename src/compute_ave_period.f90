@@ -87,19 +87,17 @@ contains
         !
         if( nlist == 0 ) return
         ! --- calculate average ---
-        k = 0
         do i=1,nlist
+            iperiod = mod(irep-1,period(i))
             do l=1,navefc(i)
                 j = fcnumi(avefc(iave0fc(i)+l))
                 i0 = i0fcdata(j)
                 n = nfcdata(j)
-                iperiod = mod(irep,period(i))
-                avedata(k+iperiod*n+1:k+iperiod*n+n) = avedata(k+iperiod*n+1:k+iperiod*n+n) &
-                    + fcdata(i0+1:i0+n)
+                k = avedatainitpos(i,iperiod,l)
+                avedata(k+1:k+n) = avedata(k+1:k+n) + fcdata(i0+1:i0+n)
                 ! --- return ---
-                fcdata(i0fcdata(myfc(i))+1:i0fcdata(myfc(i))+n) = avedata(k+iperiod*n+1:k+iperiod*n+n)
+                fcdata(i0fcdata(myfc(i))+1:i0fcdata(myfc(i))+n) = avedata(k+1:k+n)
                 !
-                k = k + n*period(i)
             end do
         end do
         ! --- output ---
@@ -132,5 +130,36 @@ contains
             end do
         end if
     end subroutine compute_ave_period
+
+    function avedatainitpos(ilist,iperiod,l)
+        use commn
+        use fix_compute_mod
+        implicit none
+        integer avedatainitpos, ilist, iperiod, l
+        integer i,j,k,iilist,iiperiod,il,n
+        !
+        avedatainitpos = 0
+        do iilist=1,ilist-1
+            do iiperiod=0,period(iilist)-1
+                do il=1,navefc(iilist)
+                    j = fcnumi(avefc(iave0fc(iilist)+il))
+                    n = nfcdata(j)
+                    avedatainitpos = avedatainitpos + n
+                end do
+            end do
+        end do
+        do iiperiod=0,iperiod-1
+            do il=1,navefc(ilist)
+                j = fcnumi(avefc(iave0fc(ilist)+il))
+                n = nfcdata(j)
+                avedatainitpos = avedatainitpos + n
+            end do
+        end do
+        do il=1,l-1
+            j = fcnumi(avefc(iave0fc(ilist)+il))
+            n = nfcdata(j)
+            avedatainitpos = avedatainitpos + n
+        end do
+    end function avedatainitpos
 end module compute_ave_period_mod
 

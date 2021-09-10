@@ -65,10 +65,11 @@ contains
         if( fflag ) return
         !
         do i=1,nlist
-            ! dpmove(:) = amove(:,i)*(sin(2d0*pi*irep*dt/period(i) + theta(i)) - &
-            !     sin(2d0*pi*(irep-1)*dt/period(i) + theta(i)) )
+            dpmove(:) = amove(:,i)*(sin(2d0*pi*irep*dt/period(i) + theta(i)) - &
+                sin(2d0*pi*(irep-1)*dt/period(i) + theta(i)) )
             vmove(:) = 2d0*pi/period(i)*amove(:,i)*cos(2d0*pi*irep*dt/period(i) + theta(i))
-            dpmove(:) = vmove(:)*dt
+            ! vmove(:) = dpmove(:)/dt
+            ! dpmove(:) = vmove(:)*dt
             do j=1,natseq(atlist(i))
                 imol = imolatseq(i0atseq(atlist(i)) + j)
                 ! --- freeze atom ---
