@@ -6,6 +6,7 @@ contains
         use file_mod
         use fix_compute_mod
         use fix_freeze_mod, only : init_fix_freeze
+        use fix_vel_scaling_mod, only : init_fix_vel_scaling
         use fix_langevin_mod, only : init_fix_langevin
         use fix_langevin2_mod, only : init_fix_langevin2
         use fix_langevin3_mod, only : init_fix_langevin3
@@ -37,6 +38,7 @@ contains
                 !
                 nfc = nfc + 1
                 fcnum = [fcnum, ifc]
+                if(fixchar=="fix_vel_scaling" .or. fixchar=="Fixvel_scaling") call init_fix_vel_scaling
                 if(fixchar=="fix_langevin" .or. fixchar=="FixLangevin") call init_fix_langevin
                 if(fixchar=="fix_langevin2" .or. fixchar=="FixLangevin2") call init_fix_langevin2
                 if(fixchar=="fix_langevin3" .or. fixchar=="FixLangevin3") call init_fix_langevin3
@@ -63,6 +65,7 @@ contains
 
     subroutine fix
         use fix_freeze_mod, only : fix_freeze
+        use fix_vel_scaling_mod, only : fix_vel_scaling
         use fix_langevin_mod, only : fix_langevin
         use fix_langevin2_mod, only : fix_langevin2
         use fix_langevin3_mod, only : fix_langevin3
@@ -76,6 +79,7 @@ contains
         implicit none
         !
         call fix_freeze
+        call fix_vel_scaling
         call fix_langevin
         call fix_langevin2
         call fix_langevin3
@@ -91,6 +95,7 @@ contains
     subroutine fix_compute
         use commn
         !use fix_freeze_mod
+        use fix_vel_scaling_mod, only : fix_vel_scaling_compute
         use fix_langevin_mod, only : fix_langevin_compute
         use fix_langevin2_mod, only : fix_langevin2_compute
         use fix_langevin3_mod, only : fix_langevin3_compute
@@ -102,6 +107,7 @@ contains
         !use fix_rigid_mod
         implicit none
 
+        call fix_vel_scaling_compute
         call fix_langevin_compute
         call fix_langevin2_compute
         call fix_langevin3_compute
