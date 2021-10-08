@@ -12,6 +12,8 @@ contains
         use compute_gg_hf_mod, only : init_compute_gg_hf
         use compute_gg_VAstress_mod, only : init_compute_gg_VAstress
         use compute_sum_mod, only : init_compute_sum
+        use compute_times_mod, only : init_compute_times
+        use compute_times_one_mod, only : init_compute_times_one
         use compute_correlate_mod, only : init_compute_correlate
         use compute_ave_mod, only : init_compute_ave
         use compute_ave_period_mod, only : init_compute_ave_period
@@ -41,6 +43,8 @@ contains
             if(comchar=="compute_gg_VAstress" .or. comchar=="ComputeGg") call init_compute_gg_VAstress
             !
             if(comchar=="compute_sum" .or. comchar=="ComputeSum") call init_compute_sum
+            if(comchar=="compute_times" .or. comchar=="Computetimes") call init_compute_times
+            if(comchar=="compute_times_one" .or. comchar=="Computetimes") call init_compute_times_one
             if(comchar=="compute_correlate" .or. comchar=="ComputeCorrelate") call init_compute_correlate
             if(comchar=="compute_ave" .or. comchar=="ComputeAve") call init_compute_ave
             if(comchar=="compute_ave_period" .or. comchar=="ComputeAvePeriod") call init_compute_ave_period
@@ -75,6 +79,8 @@ contains
         use compute_gg_hf_mod, only : compute_gg_hf
         use compute_gg_VAstress_mod, only : compute_gg_VAstress
         use compute_sum_mod, only : compute_sum
+        use compute_times_mod, only : compute_times
+        use compute_times_one_mod, only : compute_times_one
         use compute_correlate_mod, only : compute_correlate
         use compute_ave_mod, only : compute_ave
         use compute_ave_period_mod, only : compute_ave_period
@@ -92,6 +98,8 @@ contains
         !
         if(Iam==master)then
             call compute_sum
+            call compute_times
+            call compute_times_one
         end if
         call compute_correlate
         if(Iam==master)then
