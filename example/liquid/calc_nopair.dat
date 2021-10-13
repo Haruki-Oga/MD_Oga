@@ -1,0 +1,21 @@
+last.dat  # initical condition (atom pos, vel,  etc)
+last.dat  # initical condition
+./  # output directory (density, etc)
+0.2332373E-02  dt
+60000  the_number_of_repetition                                        
+2000  the_number_of_repetition_interval                               
+smooth_quad # atype, atype, eps, sig # LJparameter
+fix
+    #fix_langevin2 1
+    #    1 111 0.8269 2.8347E-02
+    fix_langevin 1
+        1 110 0.8269 2.8347E-02
+compute
+    compute_temp 100
+        1 20
+    compute_ave 200
+        1
+        ./avetemp.dat
+        100
+output
+  

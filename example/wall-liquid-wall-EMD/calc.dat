@@ -1,0 +1,61 @@
+last.dat  # initical condition (atom pos, vel,  etc)
+last.dat  # initical condition
+./  # output directory (density, etc)
+0.2332373E-02  dt
+6000000  the_number_of_repetition                                        
+200000  the_number_of_repetition_interval                               
+# atype, atype, eps, sig # LJparameter
+1 1 1.0 1.0 3.5
+1 2 0.309528 1.014706E+00 3.5
+1 3 0.309528 1.014706E+00 3.5
+fix
+    fix_freeze 2
+        6 111
+    fix_freeze 1
+        7 111
+    fix_langevin2 3
+        4 111 0.8269 2.8347E-02
+    fix_langevin2  4
+        5 111 0.8269 2.8347E-02
+compute
+    compute_temp 100
+        1 20
+    compute_chunk_1d 107
+        1 20 3 0.1
+    compute_chunk_1d 109
+        2 20 3 0.1
+    compute_chunk_1d 110
+        3 20 3 0.1
+    compute_chunk_1d 111
+        4 20 3 0.1
+    compute_chunk_1d 112
+        5 20 3 0.1
+    compute_group_group 113
+        1 2 5
+    compute_group_group 114
+        1 3 5
+    compute_group_group_hf 115
+        1 2 5
+    compute_group_group_hf 116
+        1 3 5
+    compute_ave 200
+    2
+    ./ave_force.dat
+    113 114
+    compute_ave 201
+    4
+    ./ave_hf.dat
+    3 4 115 116
+    compute_correlate 202
+        2 5 10000
+        ./hf_GK.dat
+        115 1 115 1 116 1 116 1
+    compute_correlate 203
+        4 5 10000
+        ./force_GK.dat
+        113 1 113 1 113 2 113 2 114 1 114 1 114 2 114 2
+output
+    #./result/data/langevinene.dat
+    #600000 2
+    #3 4
+  

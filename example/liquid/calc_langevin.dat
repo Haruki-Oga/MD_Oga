@@ -1,0 +1,30 @@
+last.dat  # initical condition (atom pos, vel,  etc)
+last.dat  # initical condition
+./  # output directory (density, etc)
+0.2332373E-02  dt
+6000000  the_number_of_repetition                                        
+200000  the_number_of_repetition_interval                               
+smooth_quad # atype, atype, eps, sig # LJparameter
+1 1 1.0 1.0 3.5
+fix
+    fix_langevin 1
+        1 100 0.8269 2.8347E-02
+compute
+    compute_temp 100
+        1 20
+    compute_gg_VAstress 101
+        5
+    compute_ave 200
+        1
+        ./avetemp.dat
+        100
+    #compute_correlate 201
+    #    6 5 20000
+    #    ./GKvisco.dat
+    #    101 1 101 1 101 5 101 5 101 9 101 9 101 2 101 2 101 6 101 6 101 3 101 3
+    compute_ave 202
+        1
+        ./avestress.dat
+        101
+output
+  
