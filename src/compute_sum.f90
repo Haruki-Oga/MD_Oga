@@ -36,7 +36,7 @@ contains
         end do
         read(ifilecalc,*) (sumfc(isum0fc(nlist+1)+i),i=1,nsumfcnow)
         write(form1,'(I0)') nsumfcnow
-        form1 = "(A,I,A,"//trim(form1)//"I)"
+        form1 = "(A,I,"//trim(form1)//"I)"
         write(*,form1) __FILE__, nsumfcnow, (sumfc(isum0fc(nlist+1)+i),i=1,nsumfcnow)
         !
         ndata_now = 0

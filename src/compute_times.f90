@@ -81,7 +81,7 @@ contains
         if( nlist == 0 ) return
         ! --- calculate times ---
         k = 0
-        timesdata(:) = 0d0
+        timesdata(:) = 1d0
         do i=1,nlist
             n = ndata(i)
             do l=1,ntimesfc(i)

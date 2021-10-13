@@ -36,8 +36,8 @@ contains
             timesfci = [timesfci, -1]
         end do
         read(ifilecalc,*) (timesfc(itimes0fc(nlist+1)+i), timesfci(itimes0fc(nlist+1)+i),i=1,ntimesfcnow)
-        write(form1,'(I0)') ntimesfcnow
-        form1 = "(A,I,A,"//trim(form1)//"I)"
+        write(form1,'(I0)') 2*ntimesfcnow
+        form1 = "(A,I,"//trim(form1)//"I)"
         write(*,form1) __FILE__, ntimesfcnow, (timesfc(itimes0fc(nlist+1)+i),timesfci(itimes0fc(nlist+1)+i),i=1,ntimesfcnow)
         !
         timesdata = [timesdata, 0d0]
@@ -67,7 +67,7 @@ contains
         !
         if( nlist == 0 ) return
         ! --- calculate times ---
-        timesdata(:) = 0d0
+        timesdata(:) = 1d0
         do i=1,nlist
             do l=1,ntimesfc(i)
                 j = fcnumi(timesfc(itimes0fc(i)+l))
