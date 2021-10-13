@@ -1,4 +1,13 @@
-! fix atom (dim, atype)
+!===How to use===
+!fix_addforce ${fix_id}
+!    ${atom_type} ${xyz} ${f_x} ${f_y} ${f_z}
+!---example---
+!fix_addforce 1
+!    1 100 1.0 0.0 0.0
+!---description---
+!    add force to atom of ${atom_type} type.
+!    f_x, f_y, f_z are force par atom
+!    if xyz==100, f_y and f_z are ignored.
 module fix_addforce_mod
     integer,allocatable :: myfc(:)
     integer :: nlist = 0
