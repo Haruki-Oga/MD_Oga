@@ -5,8 +5,10 @@
 !fix_addforce 1
 !    1 100 1.0 0.0 0.0
 !---description---
-!    add force to atom of ${atom_type} type.
-!    f_x, f_y, f_z are force par atom
+!    atom_typ: atom type to add force
+!    f_x,f_y,f_z: force par atom
+!    xyz: direction to apply this fix
+!    fcdata: cumulative energy
 !    if xyz==100, f_y and f_z are ignored.
 module fix_addforce_mod
     integer,allocatable :: myfc(:)

@@ -6,6 +6,7 @@ contains
         use file_mod
         use fix_compute_mod
         use compute_temp_mod, only : init_compute_temp
+        use compute_temp2_mod, only : init_compute_temp2
         use compute_chunk_1d_mod, only : init_compute_chunk_1d
         use compute_compv_mod, only : init_compute_compv
         use compute_gg_mod, only : init_compute_gg
@@ -36,6 +37,7 @@ contains
             if(ios>0) cycle ! call error_msg("read error @init_compute")
             ! --- init_compute ---
             if(comchar=="compute_temp" .or. comchar=="ComputeTemp") call init_compute_temp
+            if(comchar=="compute_temp2" .or. comchar=="ComputeTemp2") call init_compute_temp2
             if(comchar=="compute_chunk_1d" .or. comchar=="ComputeChunk1d") call init_compute_chunk_1d
             if(comchar=="compute_compv" .or. comchar=="ComputeCompv") call init_compute_compv
             if(comchar=="compute_group_group" .or. comchar=="compute_gg" .or. comchar=="ComputeGg") call init_compute_gg
@@ -73,6 +75,7 @@ contains
         use mpivar
         use commn
         use compute_temp_mod, only : compute_temp
+        use compute_temp2_mod, only : compute_temp2
         use compute_chunk_1d_mod, only : compute_chunk_1d
         use compute_compv_mod, only : compute_compv
         use compute_gg_mod, only : compute_gg
@@ -88,6 +91,7 @@ contains
         !
         if(Iam==master)then
             call compute_temp
+            call compute_temp2
             call compute_chunk_1d
             call compute_compv
         end if

@@ -1,14 +1,14 @@
 !=== How to Use ===
-!compute_temp ${fix_id}
+!compute_temp2 ${fix_id}
 !   ${atom_type} ${nsamp}
 !---example---
-!compute_temp 1
+!compute_temp2 1
 !   1 5
 !---description
 !   atom_type: atom type to calculate temperature
 !   nsamp: calculate temperature every this time
 !   fcdata: temp_x, temp_y, temp_z, temp
-module compute_temp_mod
+module compute_temp2_mod
     integer,allocatable :: myfc(:)
     integer,parameter :: ndata = 4
     integer :: nlist = 0
@@ -16,7 +16,7 @@ module compute_temp_mod
     double precision,allocatable :: ctemp(:,:)
     !
 contains
-    subroutine init_compute_temp
+    subroutine init_compute_temp2
         use update_mod
         use commn
         use file_mod
@@ -53,11 +53,11 @@ contains
         end if
         fcnumi(ifc) = nfc
         ! ===
-    end subroutine init_compute_temp
+    end subroutine init_compute_temp2
     !
     !
     ! --- compute temperature ---
-    subroutine compute_temp
+    subroutine compute_temp2
         use update_mod
         use commn
         use constant_mod
@@ -74,7 +74,7 @@ contains
                 imol = imolatseq(i0atseq(atlist(i)) + j)
                 ! calculate temperature
                 ctemp(1:3,i) = ctemp(1:3,i)&
-                    + v(:,imol)**2d0*wm(atlist(i))/bk
+                    + (v(:,imol)-f(:,imol)*dt_wmi2(atlist(i)))**2d0*wm(atlist(i))/bk
             end do
             ctemp(1:3,i) = ctemp(1:3,i)/dble(natseq(atlist(i)))
             ctemp(4,i) = sum(ctemp(1:3,i))/3d0
@@ -84,6 +84,6 @@ contains
             if(mod(irep,nsamp(i)) /= 0) cycle
             fcdata(i0fcdata(myfc(i))+1:i0fcdata(myfc(i))+ndata) = ctemp(1:4,i)
         end do
-    end subroutine compute_temp
-end module compute_temp_mod
+    end subroutine compute_temp2
+end module compute_temp2_mod
 
