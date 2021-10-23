@@ -520,8 +520,8 @@ subroutine calc_force_bonds
         if (r(3)<-vlh(3)) r(3) = r(3) + vl(3)
         !
         rabs = sqrt(r(1)*r(1)+r(2)*r(2)+r(3)*r(3))
-        fij = - k(btype(i))*(rabs - r_eq(btype(i)))/rabs
-        ep_Iam = ep_Iam + 0.5d0*k(btype(i))*(rabs - r_eq(btype(i)))**2d0
+        fij = - 2.0*k(btype(i))*(rabs - r_eq(btype(i)))/rabs
+        ep_Iam = ep_Iam + k(btype(i))*(rabs - r_eq(btype(i)))**2d0
         f_Iam(:,li) = f_Iam(:,li) + fij*r(:)
         f_Iam(:,lj) = f_Iam(:,lj) - fij*r(:)
     end do
