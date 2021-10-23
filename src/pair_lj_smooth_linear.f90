@@ -1,4 +1,4 @@
-module pair_lj_smooth_quad_mod
+module pair_lj_smooth_linear_mod
     implicit none
     logical(1),allocatable ::  pairflag(:,:)
     double precision,allocatable :: sig(:,:), eps(:,:)
@@ -20,8 +20,8 @@ contains
         do
             read(ifilecalc,*) pairstyle
             if(trim(pairstyle)=="fix" .or. trim(pairstyle)=="compute")exit
-            if(trim(pairstyle)=="smooth_quad" .or. trim(pairstyle)=="lj_smooth_quad"&
-                .or. trim(pairstyle)=="pair_lj_smooth_quad")then
+            if(trim(pairstyle)=="smooth_linear" .or. trim(pairstyle)=="lj_smooth_linear"&
+                .or. trim(pairstyle)=="pair_lj_smooth_linear")then
                 do
                     read(ifilecalc,*,iostat=ios) i,j ,r8a,r8b
                     if(ios/=0)exit
@@ -45,18 +45,18 @@ contains
         implicit none
         integer(1) atypei,atypej
         double precision rabs,rc,force_one,e
-        double precision rcsq,rabssq, sigsq, sbr6, sbrc6, dlja3
+        double precision rcsq,rabssq, sigsq, sbr6, sbrc6, dlja3, rrci
         if(.not. pairflag(atypei,atypej)) return
         rcsq = rc*rc
         rabssq = rabs*rabs
         sigsq = sig(atypei,atypej)**2.0
         sbr6 = (sigsq/rabssq)**3d0
         sbrc6 = (sigsq/rcsq)**3d0
-        dlja3 = (2d0*sbrc6-1d0)*sbrc6*rabssq/rcsq
-        !dljb = (-7.0d0*sbrc6 + 4.0d0)*sbrc6
-        force_one = 24d0*eps(atypei,atypej)*((2d0*sbr6-1d0)*sbr6 - dlja3)/rabssq
-        e = e + 4d0*eps(atypei,atypej)*( (sbr6-1d0)*sbr6 &
-            + dlja3*3d0 + (-7d0*sbrc6+4d0)*sbrc6 )
+        dlja3 = (2d0*sbrc6-1d0)*sbrc6
+        rrci = rabs/rc
+        force_one = 24d0*eps(atypei,atypej)*((2d0*sbr6-1d0)*sbr6 - dlja3*rrci)/rabssq
+        e = e + 4d0*eps(atypei,atypej)*( (sbr6-1d0)*sbr6 - (sbrc6-1d0)*sbrc6 &
+            - 6d0*(rrci-1d0)*dlja3 )
         return
     end subroutine calc_force_one
-end module pair_lj_smooth_quad_mod
+end module pair_lj_smooth_linear_mod

@@ -11,23 +11,38 @@ contains
     subroutine init_force
         use update_mod
         use file_mod
-        use pair_lj_smooth_quad_mod, only : init_pair_lj_smooth_quad => init
+        use pair_lj_smooth_quad_mod&
+            , only : init_pair_lj_smooth_quad => init, pair_lj_smooth_quad_pairflag => pairflag
+        use pair_lj_smooth_linear_mod&
+            , only : init_pair_lj_smooth_linear => init, pair_lj_smooth_linear_pairflag => pairflag
         implicit none
         double precision r8a, r8b
         integer i,j
+        allocate(pairflag(1:natype,1:natype))
+        pairflag(:,:) = .false.
         rc = 3.5d0
         rcsq = rc**2d0
         call init_pair_lj_smooth_quad
+        call init_pair_lj_smooth_linear
+        !
+        do i=1,natype
+            do j=1,natype
+                if(pair_lj_smooth_quad_pairflag(i,j)) pairflag(i,j) = .true.
+                if(pair_lj_smooth_linear_pairflag(i,j)) pairflag(i,j) = .true.
+            end do
+        end do
         !
     end subroutine init_force
     function fpair_one(atypei,atypej,rabs,e)
-        use pair_lj_smooth_quad_mod, only : f_pair_lj_smooth_quad => force_one 
+        use pair_lj_smooth_quad_mod, only : f_pair_lj_smooth_quad => calc_force_one 
+        use pair_lj_smooth_linear_mod, only : f_pair_lj_smooth_linear => calc_force_one 
         implicit none
         integer(1) atypei,atypej
         double precision rabs,e
         double precision fpair_one
         !
-        fpair_one = f_pair_lj_smooth_quad(atypei,atypej,rabs,e,rc)
+        call f_pair_lj_smooth_quad(atypei,atypej,rabs,rc,fpair_one,e)
+        call f_pair_lj_smooth_linear(atypei,atypej,rabs,rc,fpair_one,e)
     end function fpair_one
     !
     !!
