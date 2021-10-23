@@ -124,7 +124,7 @@ contains
                 cycle
             end if
             !
-            r8 = fpair_one(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq, cforce_Iam(4,ilist))
+            r8 = fpair_one(atype(li),atype(lj),sqrt(rabssq),cforce_Iam(4,ilist))
             cforce_Iam(1:3,ilist) = cforce_Iam(1:3,ilist) + typeflag*r8*r(:)
             typeflag = 0
         end do

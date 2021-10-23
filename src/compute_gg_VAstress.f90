@@ -127,7 +127,7 @@ contains
             rabssq = r(1)*r(1)+r(2)*r(2)+r(3)*r(3) 
             if(rabssq > rcsq) cycle
             !
-            r8 = fpair_one(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq, rgomi)
+            r8 = fpair_one(atype(li),atype(lj),sqrt(rabssq),rgomi)
             call calc_stress_int(r,r8*r)
         end do
     end subroutine calc_force_pair

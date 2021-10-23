@@ -20,70 +20,11 @@ module update_mod
     integer(1),allocatable :: atype(:)
     integer,allocatable :: btype(:), bondi(:), bondj(:)
     double precision,allocatable :: wm(:), k(:), r_eq(:)
-    double precision,allocatable :: sig(:,:), eps(:,:)
     logical(1),allocatable :: ffixflag(:,:), vfixflag(:,:), pfixflag(:,:)
     double precision,allocatable :: dt_wmi2(:),dps(:,:),dp(:,:)
     double precision,allocatable :: fbuf(:,:)
     integer,allocatable :: natseq(:), i0atseq(:), imolatseq(:)
 end module update_mod
-
-module force_mod
-    double precision,allocatable :: f_Iam(:,:)
-    double precision,allocatable :: f_pair(:,:), f_bonds(:,:)
-    double precision ep_Iam, ep_pair, ep_bonds, dpssqmax
-    double precision rc,rcsq
-    logical(1),allocatable :: pairflag(:,:)
-    character(64) pairstyle
-    logical(1) :: lj_smooth_quad = .false., smooth_linear = .false.
-    !
-contains
-    function fpair_one(eps,sig,rcsq,rabssq,e)
-        implicit none
-        double precision eps,sig,rcsq,rabssq,e
-        double precision fpair_one
-        if(lj_smooth_quad)then
-            fpair_one = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
-            return
-        end if
-        if(smooth_linear)then
-            fpair_one = fij_lj_smooth_linear(eps,sig,rcsq,rabssq,e)
-            return
-        end if
-        call error_msg("pair_style no match @"//__FILE__)
-    end function fpair_one
-    !
-    function fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
-        implicit none
-        double precision eps,sig,rcsq, rabssq,e
-        double precision fij_lj_smooth_quad
-        double precision sigsq, sbr6, sbrc6, dlja3
-        sigsq = sig*sig
-        sbr6 = (sigsq/rabssq)**3d0
-        sbrc6 = (sigsq/rcsq)**3d0
-        dlja3 = (2d0*sbrc6-1d0)*sbrc6*rabssq/rcsq
-        !dljb = (-7.0d0*sbrc6 + 4.0d0)*sbrc6
-        fij_lj_smooth_quad = 24d0*eps*((2d0*sbr6-1d0)*sbr6 - dlja3)/rabssq
-        e = e + 4d0*eps*( (sbr6-1d0)*sbr6 &
-            + dlja3*3d0 + (-7d0*sbrc6+4d0)*sbrc6 )
-        return
-    end function fij_lj_smooth_quad
-    !
-    function fij_lj_smooth_linear(eps,sig,rcsq,rabssq,e)
-        implicit none
-        double precision eps,sig,rcsq, rabssq, e
-        double precision fij_lj_smooth_linear
-        double precision sigsq, sbr6, sbrc6, dlja3, rrci
-        sigsq = sig*sig
-        sbr6 = (sigsq/rabssq)**3d0
-        sbrc6 = (sigsq/rcsq)**3d0
-        dlja3 = (2d0*sbrc6-1d0)*sbrc6
-        rrci = sqrt(rabssq/rcsq)
-        fij_lj_smooth_linear = 24d0*eps*((2d0*sbr6-1d0)*sbr6 - dlja3*rrci)/rabssq
-        e = e + 4d0*eps*( (sbr6-1d0)*sbr6 - (sbrc6-1d0)*sbrc6 &
-            - 6d0*(rrci-1d0)*dlja3 )
-        return
-    end function fij_lj_smooth_linear
-end module force_mod
 
 module book_keep_mod
     integer maxnlist, nlistall

@@ -79,7 +79,6 @@ subroutine read_etc
     use output_mod, only : init_output
     implicit none
     integer i,j,ios,imol
-    double precision r8a, r8b
     character(128) char_cmt,chartest
     character(1) :: sharp = "#"
     !
@@ -102,6 +101,7 @@ subroutine read_etc
     read(ifilecalc,*) nrep
     read(ifilecalc,*) nsamp_term
     if(nsamp_term > nrep) call error_msg("nsamp_term > nrep @read_etc")
+    close(ifilecalc)
     !
     ! === read init.dat ===
     open(ifileinit,file=trim(fileinit),action="read",status="old")
@@ -125,9 +125,6 @@ subroutine read_etc
     end if
     !
     allocate(wm(1:natype), k(1:nbtype), r_eq(1:nbtype))
-    allocate(sig(1:natype,1:natype),eps(1:natype,1:natype))
-    allocate(pairflag(1:natype,1:natype))
-    pairflag(1:natype,1:natype) = .false.
     allocate(atype(1:nmol), btype(1:nbonds), bondi(1:nbonds), bondj(1:nbonds))
     allocate(p(1:3,1:nmol))
     allocate(f_Iam(1:3,1:nmol))
@@ -215,30 +212,8 @@ subroutine read_etc
             end do
         end do
     end if
+    call init_force
     !
-    ! === calc.dat (second half) ===
-    eps(1:natype,1:natype) = -1d0
-    sig(1:natype,1:natype) = -1d0
-    read(ifilecalc,*) pairstyle
-    if(trim(pairstyle)=="smooth_quad" .or. trim(pairstyle)=="lj_smooth_quad")then
-        lj_smooth_quad = .true.
-    else if(trim(pairstyle)=="smooth_linear" .or. trim(pairstyle)=="lj_smooth_linear")then
-        smooth_linear = .true.
-    else
-        lj_smooth_quad = .true.
-    end if
-    !
-    do
-        read(ifilecalc,*,iostat=ios) i,j ,r8a,r8b
-        if(ios/=0)exit
-        pairflag(i,j) = .true.
-        pairflag(j,i) = .true.
-        eps(i,j) = r8a
-        sig(i,j) = r8b
-        eps(j,i) = eps(i,j)
-        sig(j,i) = sig(i,j)
-    end do
-    close(ifilecalc)
     !
     call init_fix
     call init_compute
@@ -267,8 +242,6 @@ subroutine init_const
     timebk = 0d0
     timeforce = 0d0
     eadd = 0d0
-    rc = 3.5d0
-    rcsq = rc**2d0
 end subroutine init_const
 
 
@@ -432,7 +405,6 @@ subroutine book_keep
     timebk = timebk + stop_time(t0)
 end subroutine book_keep
 
-
 subroutine calc_force
     use commn
     use mpivar
@@ -485,7 +457,7 @@ subroutine calc_force_pair
         rabssq = r(1)*r(1)+r(2)*r(2)+r(3)*r(3) 
         if(rabssq > rcsq) cycle
         !
-        r8 = fpair_one(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq, ep_Iam)
+        r8 = fpair_one(atype(li) ,atype(lj), sqrt(rabssq), ep_Iam)
         f_Iam(:,li) = f_Iam(:,li) + r8*r(:)
         f_Iam(:,lj) = f_Iam(:,lj) - r8*r(:)
     end do
@@ -532,7 +504,6 @@ subroutine calc_force_bonds
         mpi_sum, master, mpi_comm_world, ierr)
     !
 end subroutine calc_force_bonds
-
 
 subroutine update_vel
     use commn
