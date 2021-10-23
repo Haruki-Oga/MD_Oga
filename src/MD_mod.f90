@@ -46,7 +46,7 @@ contains
             return
         end if
         if(smooth_linear)then
-            fpair_one = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
+            fpair_one = fij_lj_smooth_linear(eps,sig,rcsq,rabssq,e)
             return
         end if
         call error_msg("pair_style no match @"//__FILE__)
