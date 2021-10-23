@@ -134,7 +134,7 @@ contains
                 cycle
             end if
             !
-            r8 = fij_lj(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq, e)
+            r8 = fpair_one(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq, e)
             cforce_Iam(:,li,ilist) = cforce_Iam(:,li,ilist) + r8*r(:)
             cforce_Iam(:,lj,ilist) = cforce_Iam(:,lj,ilist) - r8*r(:)
             typeflag = 0

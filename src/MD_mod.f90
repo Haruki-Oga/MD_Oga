@@ -34,23 +34,23 @@ module force_mod
     double precision rc,rcsq
     logical(1),allocatable :: pairflag(:,:)
     character(64) pairstyle
-    logical(1) :: smooth_quad = .false., smooth_linear = .false.
+    logical(1) :: lj_smooth_quad = .false., smooth_linear = .false.
     !
 contains
-    function fij_lj(eps,sig,rcsq,rabssq,e)
+    function fpair_one(eps,sig,rcsq,rabssq,e)
         implicit none
         double precision eps,sig,rcsq,rabssq,e
-        double precision fij_lj
-        if(smooth_quad)then
-            fij_lj = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
+        double precision fpair_one
+        if(lj_smooth_quad)then
+            fpair_one = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
             return
         end if
         if(smooth_linear)then
-            fij_lj = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
+            fpair_one = fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
             return
         end if
         call error_msg("pair_style no match @"//__FILE__)
-    end function fij_lj
+    end function fpair_one
     !
     function fij_lj_smooth_quad(eps,sig,rcsq,rabssq,e)
         implicit none

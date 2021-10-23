@@ -220,12 +220,12 @@ subroutine read_etc
     eps(1:natype,1:natype) = -1d0
     sig(1:natype,1:natype) = -1d0
     read(ifilecalc,*) pairstyle
-    if(trim(pairstyle)=="smooth_quad")then
-        smooth_quad = .true.
-    else if(trim(pairstyle)=="smooth_linear")then
+    if(trim(pairstyle)=="smooth_quad" .or. trim(pairstyle)=="lj_smooth_quad")then
+        lj_smooth_quad = .true.
+    else if(trim(pairstyle)=="smooth_linear" .or. trim(pairstyle)=="lj_smooth_linear")then
         smooth_linear = .true.
     else
-        smooth_quad = .true.
+        lj_smooth_quad = .true.
     end if
     !
     do
@@ -485,7 +485,7 @@ subroutine calc_force_pair
         rabssq = r(1)*r(1)+r(2)*r(2)+r(3)*r(3) 
         if(rabssq > rcsq) cycle
         !
-        r8 = fij_lj(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq, ep_Iam)
+        r8 = fpair_one(eps(atype(li),atype(lj)), sig(atype(li),atype(lj)), rcsq, rabssq, ep_Iam)
         f_Iam(:,li) = f_Iam(:,li) + r8*r(:)
         f_Iam(:,lj) = f_Iam(:,lj) - r8*r(:)
     end do
