@@ -8,6 +8,7 @@
 !   atom_type: atom type to calculate temperature
 !   nsamp: calculate temperature every this time
 !   fcdata: temp_x, temp_y, temp_z, temp
+!   temp = sum[ v**2*mass/bolz ]
 module compute_temp_mod
     integer,allocatable :: myfc(:)
     integer,parameter :: ndata = 4

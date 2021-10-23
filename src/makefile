@@ -4,7 +4,7 @@ FC = mpif90
 FCOPT = -O2 -fpp # -CB
 EXE = MD.out
 SRCS = subroutine_function.f90 MD_mod.f90 fix_compute_mod.f90\
-	  fix_freeze.f90 fix_vel_scaling.f90 fix_langevin.f90 fix_langevin2.f90 fix_langevin3.f90 fix_move_linear.f90 fix_move_wiggle.f90\
+	  fix_freeze.f90 fix_vel_scaling.f90 fix_langevin.f90 fix_langevin2.f90 fix_langevin3.f90 fix_langevin_LAMMPS.f90 fix_move_linear.f90 fix_move_wiggle.f90\
 	  fix_set_pos.f90 fix_addforce.f90 fix_NoseHoover.f90 fix_vel_scaling.f90\
 	  fix_rigid.f90 fix_rigid_rotate.f90\
 	  fix.f90\
